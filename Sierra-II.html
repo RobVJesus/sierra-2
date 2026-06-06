@@ -1199,25 +1199,39 @@ function doExport() {
   }
 }
 
+// Normaliza JSON importado: aceita objeto {NIP:base64} ou array [{NIP,_photo,...}]
+function parseImported(raw) {
+  const parsed = JSON.parse(raw);
+  if (Array.isArray(parsed)) return parsed; // formato array padrão
+  // formato objeto {NIP: base64} — só fotos
+  return Object.entries(parsed).map(([nip, b64]) => ({ NIP: nip, _photo: b64 }));
+}
+
 function doImport() {
   const raw = document.getElementById('import-textarea').value.trim();
   const status = document.getElementById('import-status');
   if (!raw) { status.className='io-status err'; status.textContent='Cole o JSON no campo acima.'; return; }
   try {
-    const imported = JSON.parse(raw);
-    let added = 0, updated = 0;
+    const imported = parseImported(raw);
+    let added = 0, updated = 0, photos_updated = 0;
     imported.forEach(row => {
       const nip = row['NIP'];
       if (!nip) return;
-      const idx = BASE_DATA.findIndex(r => r['NIP'] === nip);
-      if (row._photo) { photos[nip] = row._photo; }
-      if (idx === -1) { BASE_DATA.push(row); added++; }
-      else { Object.assign(BASE_DATA[idx], row); updated++; }
+      if (row._photo) { photos[nip] = row._photo; photos_updated++; }
+      // só mexe nos dados se vier array completo (tem campo NOME)
+      if (row['NOME']) {
+        const idx = BASE_DATA.findIndex(r => r['NIP'] === nip);
+        if (idx === -1) { BASE_DATA.push(row); added++; }
+        else { Object.assign(BASE_DATA[idx], row); updated++; }
+      }
     });
     savePhotosLocal();
     renderGrid();
     status.className = 'io-status ok';
-    status.textContent = `✓ ${added} adicionado(s), ${updated} atualizado(s).`;
+    const msg = photos_updated > 0 && added === 0 && updated === 0
+      ? `✓ ${photos_updated} foto(s) carregada(s) com sucesso!`
+      : `✓ ${added} adicionado(s), ${updated} atualizado(s), ${photos_updated} foto(s).`;
+    status.textContent = msg;
     updateCounters();
   } catch(e) {
     status.className = 'io-status err';
@@ -1234,20 +1248,25 @@ function doFileImport() {
   reader.onload = e => {
     try {
       const text = new TextDecoder('utf-8').decode(new Uint8Array(e.target.result));
-      const imported = JSON.parse(text);
-      let added = 0, updated = 0;
+      const imported = parseImported(text);
+      let added = 0, updated = 0, photos_updated = 0;
       imported.forEach(row => {
         const nip = row['NIP'];
         if (!nip) return;
-        const idx = BASE_DATA.findIndex(r => r['NIP'] === nip);
-        if (row._photo) photos[nip] = row._photo;
-        if (idx === -1) { BASE_DATA.push(row); added++; }
-        else { Object.assign(BASE_DATA[idx], row); updated++; }
+        if (row._photo) { photos[nip] = row._photo; photos_updated++; }
+        if (row['NOME']) {
+          const idx = BASE_DATA.findIndex(r => r['NIP'] === nip);
+          if (idx === -1) { BASE_DATA.push(row); added++; }
+          else { Object.assign(BASE_DATA[idx], row); updated++; }
+        }
       });
       savePhotosLocal();
       renderGrid();
       status.className = 'io-status ok';
-      status.textContent = `✓ ${added} adicionado(s), ${updated} atualizado(s).`;
+      const msg = photos_updated > 0 && added === 0 && updated === 0
+        ? `✓ ${photos_updated} foto(s) carregada(s) com sucesso!`
+        : `✓ ${added} adicionado(s), ${updated} atualizado(s), ${photos_updated} foto(s).`;
+      status.textContent = msg;
       updateCounters();
     } catch(err) {
       status.className = 'io-status err';
