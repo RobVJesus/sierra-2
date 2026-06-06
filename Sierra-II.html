@@ -543,6 +543,37 @@
     margin-top:8px;
   }
 
+  /* ─── FILE PICK ─────────────────────────── */
+  .file-pick-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .file-pick-btn {
+    background: rgba(201,168,76,0.12);
+    border: 1px solid var(--gold-dim);
+    border-radius: 6px;
+    padding: 7px 14px;
+    color: var(--gold);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s;
+  }
+  .file-pick-btn:hover { background: rgba(201,168,76,0.22); }
+  .file-pick-row input[type="file"] { display: none; }
+  .file-pick-name {
+    font-size: 11px;
+    color: var(--muted);
+    font-family: 'IBM Plex Mono', monospace;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .file-pick-name.chosen { color: var(--green); }
+
   /* ─── DRIVE CONFIG PANEL ────────────────── */
   .drive-config-panel {
     background: rgba(201,168,76,0.05);
@@ -745,18 +776,34 @@
     <h3 id="io-title">—</h3>
 
     <div id="io-import-panel" class="io-section" style="display:none">
-      <h4>📥 Importar Dados</h4>
-      <p>Cole abaixo o JSON exportado anteriormente. Os registros serão <strong>mesclados</strong> — novos registros são adicionados e os existentes (mesmo NIP) têm foto e dados atualizados.</p>
-      <label>JSON:</label>
-      <textarea id="import-textarea" placeholder='[{"NÚMERO":"2001","NIP":"81.3224.37",...}]'></textarea>
-      <button class="modal-btn btn-primary" onclick="doImport()" style="width:100%">Importar agora</button>
+
+      <!-- Importar fotos.json -->
+      <div class="drive-config-panel" style="margin-bottom:14px">
+        <h5>🖼 Importar fotos.json</h5>
+        <div class="step"><span class="step-num">1</span><span>Exporte o <code>fotos.json</code> atualizado pelo painel <strong>Exportar</strong></span></div>
+        <div class="step"><span class="step-num">2</span><span>Clique em <strong>Escolher arquivo</strong> e selecione o <code>fotos.json</code> da sua pasta</span></div>
+        <div class="step"><span class="step-num">3</span><span>Clique em <strong>Carregar fotos</strong> — as imagens aparecerão imediatamente</span></div>
+      </div>
+      <div class="file-pick-row">
+        <label class="file-pick-btn" for="fotos-file-input">📂 Escolher arquivo</label>
+        <input type="file" id="fotos-file-input" accept=".json" onchange="onFotosFileChosen(this)">
+        <span id="fotos-file-name" class="file-pick-name">Nenhum arquivo selecionado</span>
+      </div>
+      <button class="modal-btn btn-primary" onclick="doFileImport()" style="width:100%;margin-top:10px">🖼 Carregar fotos</button>
       <div class="io-status" id="import-status"></div>
+
       <hr style="margin:16px 0;border-color:var(--border)">
-      <h4>📂 Importar arquivo ZIP</h4>
-      <p style="font-size:12px;color:var(--muted)">Selecione um arquivo <code>.zip</code> exportado por este sistema:</p>
-      <input type="file" id="zip-file-input" accept=".zip,.json" style="color:var(--muted);font-size:12px;margin-bottom:8px">
-      <button class="modal-btn btn-primary" onclick="doFileImport()" style="width:100%">Carregar arquivo</button>
-      <div class="io-status" id="zip-import-status"></div>
+
+      <!-- Importar JSON de dados -->
+      <h4 style="font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;color:var(--white);margin-bottom:8px">🗂 Importar JSON de dados</h4>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:10px">Para importar registros completos (exportados via GitHub), selecione o arquivo <code>Sierra_II_Lista_Geral.json</code>:</p>
+      <div class="file-pick-row">
+        <label class="file-pick-btn" for="dados-file-input">📂 Escolher arquivo</label>
+        <input type="file" id="dados-file-input" accept=".json" onchange="onDadosFileChosen(this)">
+        <span id="dados-file-name" class="file-pick-name">Nenhum arquivo selecionado</span>
+      </div>
+      <button class="modal-btn btn-primary" onclick="doFileImportDados()" style="width:100%;margin-top:10px">📥 Importar dados</button>
+      <div class="io-status" id="dados-import-status"></div>
     </div>
 
     <div id="io-export-panel" class="io-section" style="display:none">
@@ -1239,15 +1286,52 @@ function doImport() {
   }
 }
 
+function onFotosFileChosen(inp) {
+  const label = document.getElementById('fotos-file-name');
+  if (inp.files[0]) { label.textContent = inp.files[0].name; label.className = 'file-pick-name chosen'; }
+}
+function onDadosFileChosen(inp) {
+  const label = document.getElementById('dados-file-name');
+  if (inp.files[0]) { label.textContent = inp.files[0].name; label.className = 'file-pick-name chosen'; }
+}
+
 function doFileImport() {
-  const fileInp = document.getElementById('zip-file-input');
-  const status = document.getElementById('zip-import-status');
+  const fileInp = document.getElementById('fotos-file-input');
+  const status = document.getElementById('import-status');
   const file = fileInp.files[0];
-  if (!file) { status.className='io-status err'; status.textContent='Selecione um arquivo.'; return; }
+  if (!file) { status.className='io-status err'; status.textContent='Selecione um arquivo fotos.json.'; return; }
   const reader = new FileReader();
   reader.onload = e => {
     try {
-      const text = new TextDecoder('utf-8').decode(new Uint8Array(e.target.result));
+      const text = e.target.result;
+      const imported = parseImported(text);
+      let photos_updated = 0;
+      imported.forEach(row => {
+        const nip = row['NIP'];
+        if (!nip) return;
+        if (row._photo) { photos[nip] = row._photo; photos_updated++; }
+      });
+      savePhotosLocal();
+      renderGrid();
+      status.className = 'io-status ok';
+      status.textContent = `✓ ${photos_updated} foto(s) carregada(s) com sucesso!`;
+    } catch(err) {
+      status.className = 'io-status err';
+      status.textContent = '✗ Erro ao ler arquivo: ' + err.message;
+    }
+  };
+  reader.readAsText(file, 'utf-8');
+}
+
+function doFileImportDados() {
+  const fileInp = document.getElementById('dados-file-input');
+  const status = document.getElementById('dados-import-status');
+  const file = fileInp.files[0];
+  if (!file) { status.className='io-status err'; status.textContent='Selecione um arquivo JSON.'; return; }
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const text = e.target.result;
       const imported = parseImported(text);
       let added = 0, updated = 0, photos_updated = 0;
       imported.forEach(row => {
@@ -1262,18 +1346,15 @@ function doFileImport() {
       });
       savePhotosLocal();
       renderGrid();
-      status.className = 'io-status ok';
-      const msg = photos_updated > 0 && added === 0 && updated === 0
-        ? `✓ ${photos_updated} foto(s) carregada(s) com sucesso!`
-        : `✓ ${added} adicionado(s), ${updated} atualizado(s), ${photos_updated} foto(s).`;
-      status.textContent = msg;
       updateCounters();
+      status.className = 'io-status ok';
+      status.textContent = `✓ ${added} adicionado(s), ${updated} atualizado(s), ${photos_updated} foto(s).`;
     } catch(err) {
       status.className = 'io-status err';
       status.textContent = '✗ Erro ao ler arquivo: ' + err.message;
     }
   };
-  reader.readAsArrayBuffer(file);
+  reader.readAsText(file, 'utf-8');
 }
 
 function downloadBlob(blob, filename) {
