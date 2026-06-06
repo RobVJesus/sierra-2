@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sierra II — Lista Geral</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Sans:wght@300;400;600&family=IBM+Plex+Mono:wght@400;600&display=swap');
+
+  :root {
+    --navy: #0a1628;
+    --navy-mid: #112240;
+    --navy-light: #1a3461;
+    --gold: #c9a84c;
+    --gold-light: #e8c96a;
+    --gold-dim: #8a6f2e;
+    --white: #f0f4ff;
+    --muted: #8899bb;
+    --green: #2ecc71;
+    --red: #e74c3c;
+    --orange: #f39c12;
+    --blue-bright: #4a9eff;
+    --border: rgba(201,168,76,0.2);
+    --card-bg: rgba(17,34,64,0.85);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--navy);
+    color: var(--white);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 14px;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ─── HEADER ─────────────────────────────── */
+  header {
+    background: linear-gradient(135deg, #060e1e 0%, var(--navy-mid) 60%, #0d1e3d 100%);
+    border-bottom: 2px solid var(--gold);
+    padding: 18px 28px 14px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.5);
+  }
+  .anchor-icon {
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    filter: drop-shadow(0 0 8px rgba(201,168,76,0.35));
+  }
+  .header-text h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 3px;
+    color: var(--gold);
+    line-height: 1;
+  }
+  .header-text p {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+  .header-stats {
+    margin-left: auto;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+  }
+  .stat-pill {
+    text-align: center;
+    background: rgba(201,168,76,0.08);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 6px 14px;
+  }
+  .stat-pill .num { font-family: 'IBM Plex Mono', monospace; font-size: 20px; color: var(--gold); font-weight: 600; }
+  .stat-pill .lbl { font-size: 10px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; }
+
+  /* ─── BIRTHDAY BANNER ─────────────────────── */
+  #birthday-section {
+    background: linear-gradient(135deg, #1a0a00 0%, #2d1500 50%, #1a0a00 100%);
+    border-bottom: 1px solid rgba(232,201,106,0.3);
+    padding: 16px 28px;
+    display: none;
+  }
+  #birthday-section.has-birthdays { display: block; }
+  .bday-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .bday-header h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 3px;
+    color: var(--gold-light);
+  }
+  .bday-header .month-badge {
+    background: var(--gold);
+    color: var(--navy);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 4px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .bday-cards {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .bday-card {
+    background: rgba(201,168,76,0.06);
+    border: 1px solid rgba(201,168,76,0.35);
+    border-radius: 10px;
+    padding: 12px 16px;
+    min-width: 200px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+    cursor: pointer;
+  }
+  .bday-card:hover { border-color: var(--gold); transform: translateY(-2px); }
+  .bday-card::before {
+    content: '🎂';
+    position: absolute;
+    right: 10px; top: 10px;
+    font-size: 22px;
+    opacity: 0.25;
+  }
+  .bday-card .bday-name {
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--gold-light);
+    margin-bottom: 4px;
+    padding-right: 28px;
+  }
+  .bday-card .bday-date {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .bday-card .countdown {
+    display: inline-block;
+    background: rgba(232,201,106,0.15);
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--gold);
+    font-weight: 600;
+  }
+  .bday-card .countdown.today {
+    background: rgba(46,204,113,0.2);
+    color: var(--green);
+    animation: pulse 1.5s infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.6} }
+
+  /* ─── TOOLBAR ─────────────────────────────── */
+  #toolbar {
+    background: var(--navy-mid);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 28px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .search-wrap {
+    position: relative;
+    flex: 1;
+    min-width: 200px;
+  }
+  .search-wrap input {
+    width: 100%;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 12px 8px 34px;
+    color: var(--white);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .search-wrap input:focus { border-color: var(--gold); }
+  .search-wrap::before { content:'🔍'; position:absolute; left:10px; top:50%; transform:translateY(-50%); font-size:14px; }
+  .filter-group { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+  .filter-label { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:1px; }
+  .filter-btn {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 6px 12px;
+    color: var(--muted);
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: 'IBM Plex Sans', sans-serif;
+    white-space: nowrap;
+  }
+  .filter-btn:hover { border-color: var(--gold-dim); color: var(--white); }
+  .filter-btn.active { background: var(--gold); color: var(--navy); border-color: var(--gold); font-weight: 600; }
+
+  .btn-action {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 7px 14px;
+    color: var(--muted);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .btn-action:hover { border-color: var(--gold); color: var(--gold); }
+  .btn-action.import:hover { border-color: var(--blue-bright); color: var(--blue-bright); }
+  .btn-action span { font-size:14px; }
+
+  /* ─── DRIVE STATUS ──────────────────────── */
+  .drive-status {
+    display: none;
+    padding: 6px 28px;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid transparent;
+  }
+  .drive-status.ok {
+    background: rgba(46,204,113,0.08);
+    color: #2ecc71;
+    border-color: rgba(46,204,113,0.2);
+  }
+  .drive-status.err {
+    background: rgba(243,156,18,0.08);
+    color: #f39c12;
+    border-color: rgba(243,156,18,0.2);
+  }
+
+  /* ─── RESULTS COUNT ──────────────────────── */
+  #results-bar {
+    padding: 8px 28px;
+    background: rgba(6,14,30,0.5);
+    font-size:11px;
+    color: var(--muted);
+    letter-spacing:1px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  #results-bar strong { color:var(--gold); font-family:'IBM Plex Mono',monospace; }
+
+  /* ─── GRID ───────────────────────────────── */
+  #grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 16px;
+    padding: 20px 28px;
+  }
+
+  /* ─── CARD ───────────────────────────────── */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    position: relative;
+  }
+  .card:hover { border-color: rgba(201,168,76,0.5); box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+  .card.obs-FALECIDO { opacity: 0.55; filter: grayscale(0.4); }
+  .card.obs-D { opacity: 0.7; }
+
+  .card-top {
+    display: flex;
+    gap: 14px;
+    padding: 14px 14px 10px;
+    align-items: flex-start;
+  }
+
+  /* photo area */
+  .photo-wrap {
+    width: 60px;
+    height: 60px;
+    flex-shrink: 0;
+    border-radius: 8px;
+    background: rgba(201,168,76,0.06);
+    border: 1px dashed rgba(201,168,76,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.2s;
+    position: relative;
+  }
+  .photo-wrap:hover { border-color: var(--gold); }
+  .photo-wrap:hover .photo-hint { opacity:1; }
+  .photo-wrap img { width:100%; height:100%; object-fit:cover; border-radius:7px; }
+  .photo-placeholder { font-size: 26px; opacity: 0.4; }
+  .photo-hint {
+    position: absolute; inset:0;
+    background: rgba(0,0,0,0.6);
+    display:flex; align-items:center; justify-content:center;
+    font-size:10px; color:var(--gold); letter-spacing:1px;
+    text-transform:uppercase; opacity:0; transition:opacity 0.2s;
+    border-radius:7px;
+  }
+  .photo-input { display:none; }
+
+  .card-info { flex: 1; min-width: 0; }
+  .card-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--gold-dim);
+    letter-spacing: 2px;
+    margin-bottom: 2px;
+  }
+  .card-name {
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--white);
+    line-height: 1.3;
+    margin-bottom: 4px;
+  }
+  .card-badges {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+    margin-bottom: 6px;
+  }
+  .badge {
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-family: 'IBM Plex Mono', monospace;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+  }
+  .badge-plt { background: rgba(74,158,255,0.15); color: #4a9eff; border: 1px solid rgba(74,158,255,0.3); }
+  .badge-obs-SIM { background: rgba(46,204,113,0.12); color: #2ecc71; border: 1px solid rgba(46,204,113,0.3); }
+  .badge-obs-NÃO { background: rgba(231,76,60,0.12); color: #e74c3c; border: 1px solid rgba(231,76,60,0.3); }
+  .badge-obs-D { background: rgba(149,165,166,0.1); color: #95a5a6; border: 1px solid rgba(149,165,166,0.25); }
+  .badge-obs-FALECIDO { background: rgba(50,50,50,0.3); color: #888; border: 1px solid #444; }
+  .badge-obs-VRF { background: rgba(243,156,18,0.12); color: #f39c12; border: 1px solid rgba(243,156,18,0.3); }
+  .badge-obs-C { background: rgba(155,89,182,0.12); color: #a87fd4; border: 1px solid rgba(155,89,182,0.3); }
+  .badge-cursou { background: rgba(201,168,76,0.1); color: var(--gold-dim); border: 1px solid var(--border); }
+
+  .card-location {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  .card-divider { height: 1px; background: var(--border); margin: 0 14px; }
+
+  .card-contacts {
+    padding: 10px 14px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .contact-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+  }
+  .contact-icon { font-size: 13px; flex-shrink:0; width:16px; text-align:center; }
+  .contact-row a {
+    color: var(--blue-bright);
+    text-decoration: none;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    transition: color 0.15s;
+    word-break: break-all;
+  }
+  .contact-row a:hover { color: var(--gold-light); text-decoration: underline; }
+  .contact-row .wa-link {
+    color: #25d366;
+  }
+  .contact-row .wa-link:hover { color: #1da851; }
+
+  .card-bday {
+    padding: 6px 14px 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .card-bday .bday-val {
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--gold-dim);
+  }
+  .card-bday .age-val {
+    margin-left: auto;
+    background: rgba(201,168,76,0.08);
+    border-radius:4px;
+    padding:2px 6px;
+    font-family:'IBM Plex Mono',monospace;
+    color:var(--gold-dim);
+    font-size:10px;
+  }
+
+  /* birthday glow */
+  .card.birthday-month { border-color: rgba(232,201,106,0.5); }
+  .card.birthday-month .card-top { background: linear-gradient(135deg, rgba(201,168,76,0.06) 0%, transparent 100%); }
+
+  /* empty state */
+  #empty {
+    grid-column: 1/-1;
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--muted);
+    display: none;
+  }
+  #empty .empty-icon { font-size: 48px; margin-bottom: 12px; }
+  #empty p { font-size: 14px; }
+
+  /* ─── MODAL ──────────────────────────────── */
+  #modal-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+  }
+  #modal-overlay.open { display: flex; }
+  #modal {
+    background: var(--navy-mid);
+    border: 1px solid var(--gold);
+    border-radius: 14px;
+    padding: 24px;
+    max-width: 420px;
+    width: 90%;
+    position: relative;
+  }
+  #modal h3 { font-family:'Bebas Neue',sans-serif; font-size:20px; letter-spacing:2px; color:var(--gold); margin-bottom:16px; }
+  #modal .close-btn {
+    position:absolute; top:14px; right:16px;
+    background:none; border:none; color:var(--muted); font-size:20px; cursor:pointer;
+  }
+  #modal .close-btn:hover { color:var(--white); }
+  #modal p { font-size:13px; color:var(--muted); margin-bottom:8px; line-height:1.6; }
+  #modal .modal-btns { display:flex; gap:10px; margin-top:16px; flex-wrap:wrap; }
+  #modal .modal-btn {
+    flex:1;
+    padding:9px 16px;
+    border-radius:7px;
+    border:none;
+    cursor:pointer;
+    font-family:'IBM Plex Sans',sans-serif;
+    font-size:13px;
+    font-weight:600;
+    transition:opacity 0.15s;
+  }
+  #modal .modal-btn:hover { opacity:0.85; }
+  .btn-primary { background:var(--gold); color:var(--navy); }
+  .btn-secondary { background:rgba(255,255,255,0.08); color:var(--white); }
+
+  /* ─── IMPORT/EXPORT MODAL ─────────────────── */
+  #io-modal-overlay {
+    display:none;
+    position:fixed; inset:0;
+    background:rgba(0,0,0,0.75);
+    z-index:300;
+    align-items:center;
+    justify-content:center;
+  }
+  #io-modal-overlay.open { display:flex; }
+  #io-modal {
+    background: var(--navy-mid);
+    border: 1px solid var(--gold);
+    border-radius: 14px;
+    padding: 24px;
+    max-width: 480px;
+    width: 90%;
+    position: relative;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  #io-modal h3 { font-family:'Bebas Neue',sans-serif; font-size:20px; letter-spacing:2px; color:var(--gold); margin-bottom:16px; }
+  #io-modal .close-btn {
+    position:absolute; top:14px; right:16px;
+    background:none; border:none; color:var(--muted); font-size:20px; cursor:pointer;
+  }
+  #io-modal p { font-size:13px; color:var(--muted); margin-bottom:12px; line-height:1.6; }
+  #io-modal select, #io-modal textarea {
+    width:100%;
+    background:rgba(255,255,255,0.05);
+    border:1px solid var(--border);
+    border-radius:6px;
+    padding:8px 10px;
+    color:var(--white);
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px;
+    outline:none;
+    margin-bottom:12px;
+    resize:vertical;
+  }
+  #io-modal textarea { min-height:120px; }
+  #io-modal label { font-size:12px; color:var(--muted); display:block; margin-bottom:4px; text-transform:uppercase; letter-spacing:1px; }
+  .io-section { margin-bottom:20px; border-bottom:1px solid var(--border); padding-bottom:20px; }
+  .io-section:last-child { border-bottom:none; margin-bottom:0; }
+  .io-section h4 { font-family:'Bebas Neue',sans-serif; font-size:16px; letter-spacing:2px; color:var(--white); margin-bottom:12px; }
+  .io-status { font-size:12px; padding:6px 10px; border-radius:5px; margin-top:6px; display:none; }
+  .io-status.ok { background:rgba(46,204,113,0.15); color:#2ecc71; display:block; }
+  .io-status.err { background:rgba(231,76,60,0.15); color:#e74c3c; display:block; }
+
+  footer {
+    text-align:center;
+    padding:16px;
+    font-size:11px;
+    color:rgba(136,153,187,0.5);
+    letter-spacing:1px;
+    border-top:1px solid var(--border);
+    margin-top:8px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <!-- Bandeira alfabética Sierra (ICS): branca com retângulo azul central -->
+  <svg class="anchor-icon" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Bandeira Sierra">
+    <!-- fundo branco -->
+    <rect width="44" height="44" fill="#ffffff"/>
+    <!-- retângulo azul central -->
+    <rect x="11" y="11" width="22" height="22" fill="#1a5fa8"/>
+    <!-- borda fina dourada -->
+    <rect x="0" y="0" width="44" height="44" fill="none" stroke="#c9a84c" stroke-width="1.5"/>
+  </svg>
+  <div class="header-text">
+    <h1>Sierra II</h1>
+    <p>Lista Geral de Veteranos da Marinha</p>
+  </div>
+  <div class="header-stats">
+    <div class="stat-pill">
+      <div class="num" id="total-count">—</div>
+      <div class="lbl">Total</div>
+    </div>
+    <div class="stat-pill">
+      <div class="num" id="active-count">—</div>
+      <div class="lbl">No grupo</div>
+    </div>
+    <div class="stat-pill">
+      <div class="num" id="bday-count">—</div>
+      <div class="lbl">Aniv. mês</div>
+    </div>
+  </div>
+</header>
+
+<!-- Birthday banner -->
+<section id="birthday-section">
+  <div class="bday-header">
+    <span style="font-size:22px">🎂</span>
+    <h2>Aniversariantes do Mês</h2>
+    <span class="month-badge" id="month-name">—</span>
+  </div>
+  <div class="bday-cards" id="bday-cards"></div>
+</section>
+
+<!-- Toolbar -->
+<div id="toolbar">
+  <div class="search-wrap">
+    <input type="text" id="search" placeholder="Buscar por nome, NIP, cidade, email…" oninput="filterAll()">
+  </div>
+  <div class="filter-group">
+    <span class="filter-label">OBS:</span>
+    <button class="filter-btn active" data-obs="TODOS" onclick="setObsFilter(this)">Todos</button>
+    <button class="filter-btn" data-obs="SIM" onclick="setObsFilter(this)">No grupo</button>
+    <button class="filter-btn" data-obs="NÃO" onclick="setObsFilter(this)">Fora</button>
+    <button class="filter-btn" data-obs="VRF" onclick="setObsFilter(this)">A verificar</button>
+    <button class="filter-btn" data-obs="D" onclick="setObsFilter(this)">Desconhecido</button>
+    <button class="filter-btn" data-obs="FALECIDO" onclick="setObsFilter(this)">Falecido</button>
+  </div>
+  <button class="btn-action import" onclick="openIO('import')"><span>📥</span> Importar</button>
+  <button class="btn-action" onclick="openIO('export')"><span>📤</span> Exportar</button>
+</div>
+
+<div id="drive-status" class="drive-status"></div>
+<div id="results-bar">Exibindo <strong id="shown-count">0</strong> de <strong id="total-shown">0</strong> registros</div>
+
+<!-- Grid -->
+<div id="grid">
+  <div id="empty">
+    <div class="empty-icon">🔍</div>
+    <p>Nenhum registro encontrado com esses filtros.</p>
+  </div>
+</div>
+
+<footer>Sierra II · Lista Geral · Uso offline · Gerado automaticamente</footer>
+
+<!-- Photo modal -->
+<div id="modal-overlay" onclick="if(event.target===this)closeModal()">
+  <div id="modal">
+    <button class="close-btn" onclick="closeModal()">✕</button>
+    <h3>Foto do Veterano</h3>
+    <p id="modal-name"></p>
+    <p style="font-size:12px;color:var(--muted);">Selecione uma foto do dispositivo. A imagem é armazenada localmente neste arquivo e salva na exportação.</p>
+    <div class="modal-btns">
+      <button class="modal-btn btn-primary" onclick="triggerPhotoInput()">📷 Escolher foto</button>
+      <button class="modal-btn btn-secondary" id="remove-photo-btn" onclick="removePhoto()" style="display:none">🗑 Remover</button>
+      <button class="modal-btn btn-secondary" onclick="closeModal()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Import/Export modal -->
+<div id="io-modal-overlay" onclick="if(event.target===this)closeIO()">
+  <div id="io-modal">
+    <button class="close-btn" onclick="closeIO()">✕</button>
+    <h3 id="io-title">—</h3>
+
+    <div id="io-import-panel" class="io-section" style="display:none">
+      <h4>📥 Importar Dados</h4>
+      <p>Cole abaixo o JSON exportado anteriormente. Os registros serão <strong>mesclados</strong> — novos registros são adicionados e os existentes (mesmo NIP) têm foto e dados atualizados.</p>
+      <label>JSON:</label>
+      <textarea id="import-textarea" placeholder='[{"NÚMERO":"2001","NIP":"81.3224.37",...}]'></textarea>
+      <button class="modal-btn btn-primary" onclick="doImport()" style="width:100%">Importar agora</button>
+      <div class="io-status" id="import-status"></div>
+      <hr style="margin:16px 0;border-color:var(--border)">
+      <h4>📂 Importar arquivo ZIP</h4>
+      <p style="font-size:12px;color:var(--muted)">Selecione um arquivo <code>.zip</code> exportado por este sistema:</p>
+      <input type="file" id="zip-file-input" accept=".zip,.json" style="color:var(--muted);font-size:12px;margin-bottom:8px">
+      <button class="modal-btn btn-primary" onclick="doFileImport()" style="width:100%">Carregar arquivo</button>
+      <div class="io-status" id="zip-import-status"></div>
+    </div>
+
+    <div id="io-export-panel" class="io-section" style="display:none">
+      <h4>📤 Exportar Dados</h4>
+      <p>Escolha o formato conforme o destino:</p>
+      <ul style="font-size:12px;color:var(--muted);margin-bottom:12px;padding-left:18px;line-height:1.8">
+        <li><strong style="color:var(--white)">JSON de dados</strong> → suba ao GitHub (dados sem fotos, arquivo leve)</li>
+        <li><strong style="color:var(--white)">fotos.json</strong> → suba ao Google Drive na pasta <code>MB-Sierra-II</code> (substitua o arquivo anterior)</li>
+        <li><strong style="color:var(--white)">CSV</strong> → planilha sem fotos</li>
+      </ul>
+      <label>Formato:</label>
+      <select id="export-format">
+        <option value="json">JSON de dados — para GitHub</option>
+        <option value="fotos">fotos.json — para Google Drive (MB-Sierra-II)</option>
+        <option value="csv">CSV (sem fotos)</option>
+      </select>
+      <button class="modal-btn btn-primary" onclick="doExport()" style="width:100%">⬇ Baixar arquivo</button>
+      <div class="io-status" id="export-status"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════
+const BASE_DATA = [{"NÚMERO": "2001", "NIP": "81.3224.37", "PELOTÃO": "1", "NOME": "ANDRÉ LUIZ DE MELO NETO", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "D", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2002", "NIP": "81.3225.34", "PELOTÃO": "2", "NOME": "GILVAN GALDINO DE OLIVEIRA", "DATA NASC": "1964-06-04", "MÊS": "jun", "ESTADO": "ITÁLIA", "CIDADE": "CUNEO", "CURSOU": "", "EMAIL": "", "TELEFONE": "393 801 398 812", "OBS": "SIM", "IDADE EM DIAS": "22647", "NOME DE GUERRA": ""}, {"NÚMERO": "2003", "NIP": "81.3226.31", "PELOTÃO": "3", "NOME": "IVANILDO GOMES DA SILVA", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "FALECIDO", "IDADE EM DIAS": "", "NOME DE GUERRA": ""}, {"NÚMERO": "2004", "NIP": "81.3227.39", "PELOTÃO": "1", "NOME": "ALCIDES FELIPE DE CARVALHO", "DATA NASC": "1964-03-29", "MÊS": "mar", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "91 983 625 948", "OBS": "SIM", "IDADE EM DIAS": "22714", "NOME DE GUERRA": ""}, {"NÚMERO": "2005", "NIP": "81.3228.36", "PELOTÃO": "2", "NOME": "NEUDES NASCIMENTO TEIXEIRA", "DATA NASC": "1964-08-29", "MÊS": "ago", "ESTADO": "DF", "CIDADE": "BRASÍLIA", "CURSOU": "ES", "EMAIL": "neudes01teixeira@gmail.com", "TELEFONE": "61 981 759 801", "OBS": "SIM", "IDADE EM DIAS": "22561", "NOME DE GUERRA": ""}, {"NÚMERO": "2006", "NIP": "81.3229.33", "PELOTÃO": "3", "NOME": "JOÃO BATISTA DA SILVA", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "D", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2007", "NIP": "81.3230.34", "PELOTÃO": "1", "NOME": "MANOEL DE BARROS BARBOSA NETO", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "FALECIDO", "IDADE EM DIAS": "", "NOME DE GUERRA": ""}, {"NÚMERO": "2008", "NIP": "81.3231.31", "PELOTÃO": "2", "NOME": "ALUIZIO MARQUÊS DA SILVA COSTA", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "FALECIDO", "IDADE EM DIAS": "", "NOME DE GUERRA": ""}, {"NÚMERO": "2009", "NIP": "81.3232.39", "PELOTÃO": "3", "NOME": "PEDRO REZENDE DA SILVA", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "D", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2010", "NIP": "81.3233.36", "PELOTÃO": "1", "NOME": "LUCIANO DA CONCEIÇÃO SACRAMENTO", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "D", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2011", "NIP": "81.3234.33", "PELOTÃO": "2", "NOME": "CLÁUDIO AMÉRICO GALINDO", "DATA NASC": "1963-02-25", "MÊS": "fev", "ESTADO": "AL", "CIDADE": "MACEIÓ", "CURSOU": "", "EMAIL": "", "TELEFONE": "82 996 010 441", "OBS": "NÃO", "IDADE EM DIAS": "23112", "NOME DE GUERRA": ""}, {"NÚMERO": "2012", "NIP": "81.3235.31", "PELOTÃO": "3", "NOME": "VALDOMIRO AGEU BISPO", "DATA NASC": "1964-06-06", "MÊS": "jun", "ESTADO": "RJ", "CIDADE": "NITERÓI", "CURSOU": "MA", "EMAIL": "", "TELEFONE": "21 987 243 744", "OBS": "SIM", "IDADE EM DIAS": "22645", "NOME DE GUERRA": ""}, {"NÚMERO": "2013", "NIP": "81.3236.38", "PELOTÃO": "1", "NOME": "WEYVSON CLÊNIO CAVALCANTE", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "D", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2014", "NIP": "81.3237.35", "PELOTÃO": "2", "NOME": "ROBERTO VERÍSSIMO DE JESUS", "DATA NASC": "1963-06-25", "MÊS": "jun", "ESTADO": "PORTUGAL", "CIDADE": "BRAGA", "CURSOU": "CN", "EMAIL": "vezinho@gmail.com", "TELEFONE": "351 913 874 758", "OBS": "SIM", "IDADE EM DIAS": "22992", "NOME DE GUERRA": ""}, {"NÚMERO": "2015", "NIP": "81.3238.32", "PELOTÃO": "3", "NOME": "JOSÉ JAILTON ANDRADE CARDOSO", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "D", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2016", "NIP": "81.3239.30", "PELOTÃO": "1", "NOME": "DJAIR DA COSTA E SILVA", "DATA NASC": "1963-09-27", "MÊS": "set", "ESTADO": "RJ", "CIDADE": "RIO DE JANEIRO", "CURSOU": "", "EMAIL": "", "TELEFONE": "21 994 628 119", "OBS": "NÃO", "IDADE EM DIAS": "22898", "NOME DE GUERRA": ""}, {"NÚMERO": "2017", "NIP": "81.3240.31", "PELOTÃO": "2", "NOME": "EDMILSON GALDINO DA SILVA", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "D", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2018", "NIP": "81.3241.38", "PELOTÃO": "3", "NOME": "IVANILDO BELARMINO GOMES DE SOUZA", "DATA NASC": "1963-08-03", "MÊS": "ago", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "53 981 177 933", "OBS": "NÃO", "IDADE EM DIAS": "22953", "NOME DE GUERRA": ""}, {"NÚMERO": "2019", "NIP": "81.3242.35", "PELOTÃO": "1", "NOME": "ELIAS CABOCLO DOS SANTOS", "DATA NASC": "1964-05-20", "MÊS": "mai", "ESTADO": "PE", "CIDADE": "PAULISTA", "CURSOU": "CA", "EMAIL": "santosmarinhape@gmail.com", "TELEFONE": "81 989 901 011", "OBS": "SIM", "IDADE EM DIAS": "22662", "NOME DE GUERRA": "81 991 748 452"}, {"NÚMERO": "2020", "NIP": "81.3243.32", "PELOTÃO": "2", "NOME": "JOSÉ MANOEL DE LIMA", "DATA NASC": "1963-10-15", "MÊS": "out", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "75 991 640 752", "OBS": "NÃO", "IDADE EM DIAS": "22880", "NOME DE GUERRA": ""}, {"NÚMERO": "2021", "NIP": "81.3244.30", "PELOTÃO": "3", "NOME": "ENOCK FLORÊNCIO DOS SANTOS", "DATA NASC": "1963-10-13", "MÊS": "out", "ESTADO": "RJ", "CIDADE": "SÃO GONÇALO", "CURSOU": "CN", "EMAIL": "enockfs@yahoo.com.br", "TELEFONE": "21 991 261 470", "OBS": "NÃO", "IDADE EM DIAS": "22882", "NOME DE GUERRA": ""}, {"NÚMERO": "2022", "NIP": "81.3245.37", "PELOTÃO": "1", "NOME": "ANTONIO EDILSON DA ROCHA", "DATA NASC": "1962-05-25", "MÊS": "mai", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "D", "IDADE EM DIAS": "23388", "NOME DE GUERRA": ""}, {"NÚMERO": "2023", "NIP": "81.3246.34", "PELOTÃO": "2", "NOME": "LUIZ ADALTO DA SILVA FILHO", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "FALECIDO", "IDADE EM DIAS": "", "NOME DE GUERRA": ""}, {"NÚMERO": "2024", "NIP": "81.3247.31", "PELOTÃO": "3", "NOME": "ALEXANDRE JOSÉ CORREIA", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "D", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2025", "NIP": "81.3248.39", "PELOTÃO": "1", "NOME": "ZIONALDO FERREIRA DE GÓIS", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "D", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2026", "NIP": "81.3249.36", "PELOTÃO": "2", "NOME": "MARCOS JOSÉ FERREIRA DE LIMA", "DATA NASC": "1964-02-23", "MÊS": "fev", "ESTADO": "RJ", "CIDADE": "SÃO GONÇALO", "CURSOU": "", "EMAIL": "marcosjflima1@gmail.com", "TELEFONE": "21 979 473 386", "OBS": "SIM", "IDADE EM DIAS": "22749", "NOME DE GUERRA": ""}, {"NÚMERO": "2027", "NIP": "81.3250.37", "PELOTÃO": "3", "NOME": "NILSON ANTONIO SANTOS DE OLIVEIRA", "DATA NASC": "", "MÊS": "", "ESTADO": "RJ", "CIDADE": "RIO DE JANEIRO", "CURSOU": "", "EMAIL": "", "TELEFONE": "21 970 395 609", "OBS": "SIM", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2028", "NIP": "81.3251.34", "PELOTÃO": "1", "NOME": "ALBERES VICENTE DE LIMA", "DATA NASC": "1963-02-15", "MÊS": "fev", "ESTADO": "RN", "CIDADE": "NATAL", "CURSOU": "", "EMAIL": "", "TELEFONE": "84 987 655 971", "OBS": "NÃO", "IDADE EM DIAS": "23122", "NOME DE GUERRA": ""}, {"NÚMERO": "2029", "NIP": "81.3252.31", "PELOTÃO": "2", "NOME": "ISRAEL BARBOSA DA SILVA", "DATA NASC": "1964-12-20", "MÊS": "dez", "ESTADO": "RJ", "CIDADE": "RIO DE JANEIRO", "CURSOU": "CN", "EMAIL": "israeledi1@hotmail.com", "TELEFONE": "21 989 984 513", "OBS": "SIM", "IDADE EM DIAS": "22448", "NOME DE GUERRA": ""}, {"NÚMERO": "2030", "NIP": "81.3253.31", "PELOTÃO": "3", "NOME": "JOAO MARIA ALVES DE FRANCA", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "D", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2031", "NIP": "81.3254.36", "PELOTÃO": "1", "NOME": "CELSO DE FIGUERÔA PEREIRA FILHO", "DATA NASC": "1964-05-20", "MÊS": "mai", "ESTADO": "PE", "CIDADE": "RECIFE", "CURSOU": "", "EMAIL": "", "TELEFONE": "81 984 518 280", "OBS": "SIM", "IDADE EM DIAS": "22662", "NOME DE GUERRA": ""}, {"NÚMERO": "2032", "NIP": "81.3255.33", "PELOTÃO": "2", "NOME": "ERONILDO JOSÉ DE OLIVEIRA", "DATA NASC": "1963-08-28", "MÊS": "ago", "ESTADO": "PE", "CIDADE": "OLINDA", "CURSOU": "", "EMAIL": "eronildonone@hotmail.com", "TELEFONE": "81 984 768 068", "OBS": "SIM", "IDADE EM DIAS": "22928", "NOME DE GUERRA": ""}, {"NÚMERO": "2033", "NIP": "81.3256.31", "PELOTÃO": "3", "NOME": "LUCIANO PINTO DE MENDONÇA", "DATA NASC": "1964-01-28", "MÊS": "jan", "ESTADO": "ES", "CIDADE": "VITÓRIA", "CURSOU": "", "EMAIL": "", "TELEFONE": "27 999 464 020", "OBS": "NÃO", "IDADE EM DIAS": "22775", "NOME DE GUERRA": ""}, {"NÚMERO": "2034", "NIP": "81.3257.38", "PELOTÃO": "1", "NOME": "JOSÉ MARCELO RODRIGUES", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "FALECIDO", "IDADE EM DIAS": "", "NOME DE GUERRA": ""}, {"NÚMERO": "2035", "NIP": "81.3258.35", "PELOTÃO": "2", "NOME": "JAIME ALVES FEITOSA FILHO", "DATA NASC": "1964-06-02", "MÊS": "jun", "ESTADO": "RJ", "CIDADE": "RIO DE JANEIRO", "CURSOU": "", "EMAIL": "", "TELEFONE": "21 976 829 001", "OBS": "SIM", "IDADE EM DIAS": "22649", "NOME DE GUERRA": ""}, {"NÚMERO": "2036", "NIP": "81.3259.32", "PELOTÃO": "3", "NOME": "CELSO EDUARDO SILVA RIBEIRO", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "D", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2037", "NIP": "81.3260.33", "PELOTÃO": "1", "NOME": "ITANILDO ALVES BEZERRA", "DATA NASC": "1964-05-14", "MÊS": "mai", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "21 32013098", "OBS": "VRF", "IDADE EM DIAS": "22668", "NOME DE GUERRA": ""}, {"NÚMERO": "2038", "NIP": "81.3261.31", "PELOTÃO": "2", "NOME": "JOSENILDO ALVES DE SOUZA", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "D", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2039", "NIP": "81.3262.38", "PELOTÃO": "3", "NOME": "ALMIR DOS REIS GONÇALVES", "DATA NASC": "1964-08-09", "MÊS": "ago", "ESTADO": "RJ", "CIDADE": "RIO DE JANEIRO", "CURSOU": "CN", "EMAIL": "almirreis16@gmail.com", "TELEFONE": "21 981 654 015", "OBS": "NÃO", "IDADE EM DIAS": "22581", "NOME DE GUERRA": ""}, {"NÚMERO": "2040", "NIP": "81.3263.35", "PELOTÃO": "1", "NOME": "CARLOS JOSÉ DE SANTANA", "DATA NASC": "1964-09-01", "MÊS": "set", "ESTADO": "RJ", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "21 984 801 012", "OBS": "NÃO", "IDADE EM DIAS": "22558", "NOME DE GUERRA": "21 981654015"}, {"NÚMERO": "2041", "NIP": "81.3264.32", "PELOTÃO": "2", "NOME": "ROBSON CARLOS MORAIS", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "D", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2042", "NIP": "81.3265.30", "PELOTÃO": "3", "NOME": "EDIVALDO HENRIQUE CARLOS", "DATA NASC": "1964-08-24", "MÊS": "ago", "ESTADO": "SE", "CIDADE": "ARACAJU", "CURSOU": "CN", "EMAIL": "ehcarlos64@gmail.com", "TELEFONE": "79 988 725 132", "OBS": "SIM", "IDADE EM DIAS": "22566", "NOME DE GUERRA": ""}, {"NÚMERO": "2043", "NIP": "81.3266.37", "PELOTÃO": "1", "NOME": "EXPEDITO OLEGÁRIO DO NASCIMENTO", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "D", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2044", "NIP": "81.3267.34", "PELOTÃO": "2", "NOME": "MARCIO SANTANA RODRIGUES", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "D", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2045", "NIP": "81.3268.31", "PELOTÃO": "3", "NOME": "HELIO LUIZ BEZERRA", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "D", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2046", "NIP": "81.3269.39", "PELOTÃO": "1", "NOME": "MARCOS ANDRÉ ALVES DE OLIVEIRA", "DATA NASC": "1964-03-24", "MÊS": "mar", "ESTADO": "RJ", "CIDADE": "RIO DE JANEIRO", "CURSOU": "", "EMAIL": "marcosandree2@hotmail.com", "TELEFONE": "21 983 552 663", "OBS": "SIM", "IDADE EM DIAS": "22719", "NOME DE GUERRA": "21 969 174 645"}, {"NÚMERO": "2047", "NIP": "81.3270.30", "PELOTÃO": "2", "NOME": "DÁRIO FRANCISCO DE AZEVEDO", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "D", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2048", "NIP": "81.3271.37", "PELOTÃO": "3", "NOME": "HELIO BATISTA PEREIRA", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "D", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2049", "NIP": "81.3272.34", "PELOTÃO": "1", "NOME": "RIDELSON COSME SILVA", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "FALECIDO", "IDADE EM DIAS": "", "NOME DE GUERRA": ""}, {"NÚMERO": "2050", "NIP": "81.3273.31", "PELOTÃO": "2", "NOME": "JOSÉ DUCLÉCIO DE LIMA", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "FALECIDO", "IDADE EM DIAS": "", "NOME DE GUERRA": ""}, {"NÚMERO": "2051", "NIP": "81.3274.39", "PELOTÃO": "3", "NOME": "JOSÉ ARNOLD GOMES DE OLIVEIRA", "DATA NASC": "1964-08-22", "MÊS": "ago", "ESTADO": "SC", "CIDADE": "SÃO BENTO DO SUL", "CURSOU": "HN", "EMAIL": "kalodharis@gmail.com", "TELEFONE": "47 992 499 193", "OBS": "NÃO", "IDADE EM DIAS": "22568", "NOME DE GUERRA": ""}, {"NÚMERO": "2052", "NIP": "81.3275.36", "PELOTÃO": "1", "NOME": "ROQUE DAMIÃO DA SILVA", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "FALECIDO", "IDADE EM DIAS": "", "NOME DE GUERRA": ""}, {"NÚMERO": "2053", "NIP": "81.3276.33", "PELOTÃO": "2", "NOME": "ARNALDO DA CRUZ QUEIROGA", "DATA NASC": "1963-02-10", "MÊS": "fev", "ESTADO": "SE", "CIDADE": "ARACAJÚ", "CURSOU": "CN", "EMAIL": "arnaldo.queiroga@gmail.com", "TELEFONE": "79 991 812 360", "OBS": "SIM", "IDADE EM DIAS": "23127", "NOME DE GUERRA": ""}, {"NÚMERO": "2054", "NIP": "81.3277.31", "PELOTÃO": "3", "NOME": "VALDEMIR FERREIRA DA SILVA FILHO", "DATA NASC": "1964-09-05", "MÊS": "set", "ESTADO": "RN", "CIDADE": "NATAL", "CURSOU": "", "EMAIL": "valfersilfilho@bol.com.br", "TELEFONE": "84 987 425 741", "OBS": "SIM", "IDADE EM DIAS": "22554", "NOME DE GUERRA": ""}, {"NÚMERO": "2055", "NIP": "81.3278.38", "PELOTÃO": "1", "NOME": "WELLINGTON ANTONIO", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "D", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2056", "NIP": "81.3279.35", "PELOTÃO": "2", "NOME": "ANDRÉ LUIZ WANDERLEY", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "D", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2057", "NIP": "81.3280.36", "PELOTÃO": "3", "NOME": "LUIS FÉLIX PIMENTEL", "DATA NASC": "1964-07-24", "MÊS": "jul", "ESTADO": "PE", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "81 999 189 012", "OBS": "NÃO", "IDADE EM DIAS": "22597", "NOME DE GUERRA": ""}, {"NÚMERO": "2058", "NIP": "81.3281.33", "PELOTÃO": "1", "NOME": "MIRIÊ RODRIGUES DO REGO", "DATA NASC": "1964-05-10", "MÊS": "mai", "ESTADO": "RJ", "CIDADE": "SÃO GONÇALO", "CURSOU": "", "EMAIL": "", "TELEFONE": "21 986 702 681", "OBS": "NÃO", "IDADE EM DIAS": "22672", "NOME DE GUERRA": ""}, {"NÚMERO": "2059", "NIP": "81.3282.31", "PELOTÃO": "2", "NOME": "CLAUDIO CABRAL DE LIRA", "DATA NASC": "1963-03-31", "MÊS": "mar", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "21 994 761 519", "OBS": "NÃO", "IDADE EM DIAS": "23078", "NOME DE GUERRA": ""}, {"NÚMERO": "2060", "NIP": "81.3283.28", "PELOTÃO": "3", "NOME": "VALDIR BARBOSA DA SILVA", "DATA NASC": "", "MÊS": "", "ESTADO": "RJ", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "21 980 264 372", "OBS": "VRF", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2061", "NIP": "81.3284.35", "PELOTÃO": "1", "NOME": "ORLANDO FERREIRA DE SOUZA", "DATA NASC": "1962-10-10", "MÊS": "out", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "21 987 877 572", "OBS": "VRF", "IDADE EM DIAS": "23250", "NOME DE GUERRA": ""}, {"NÚMERO": "2062", "NIP": "81.3285.32", "PELOTÃO": "2", "NOME": "LUIS ANTONIO DA SILVA", "DATA NASC": "1963-07-15", "MÊS": "jul", "ESTADO": "PB", "CIDADE": "BAYEUX", "CURSOU": "MA", "EMAIL": "luis.antsilva63@gmail.com", "TELEFONE": "84 991 042 884", "OBS": "SIM", "IDADE EM DIAS": "22972", "NOME DE GUERRA": ""}, {"NÚMERO": "2063", "NIP": "81.3286.30", "PELOTÃO": "3", "NOME": "ANDRÉ LUIZ DE MORAES", "DATA NASC": "1963-12-21", "MÊS": "dez", "ESTADO": "RS", "CIDADE": "RIO GRANDE", "CURSOU": "MR", "EMAIL": "andreluizdemoraes21@gmail.com", "TELEFONE": "53 984 564 995", "OBS": "SIM", "IDADE EM DIAS": "22813", "NOME DE GUERRA": ""}, {"NÚMERO": "2064", "NIP": "81.3287.37", "PELOTÃO": "1", "NOME": "LUIZ CARLOS DE LIMA", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "D", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2065", "NIP": "81.3288.34", "PELOTÃO": "2", "NOME": "IVSON DA SILVA FERNANDES", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "D", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2066", "NIP": "81.3289.31", "PELOTÃO": "3", "NOME": "UBIRAJARA JOSÉ DE SOUZA", "DATA NASC": "1964-10-14", "MÊS": "out", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "D", "IDADE EM DIAS": "22515", "NOME DE GUERRA": ""}, {"NÚMERO": "2067", "NIP": "81.3290.32", "PELOTÃO": "1", "NOME": "VALDEVALDO SIQUEIRA CAMPOS", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "D", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2068", "NIP": "81.3291.30", "PELOTÃO": "2", "NOME": "EDMILSON FERREIRA DO NASCIMENTO", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "D", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2069", "NIP": "81.3992.37", "PELOTÃO": "3", "NOME": "JOSUÉ ANTONIO DA SILVA", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "D", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2070", "NIP": "81.3293.34", "PELOTÃO": "1", "NOME": "ALEXANDRE HENRIQUE BEZERRA VELOSO", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "D", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2071", "NIP": "81.3294.31", "PELOTÃO": "2", "NOME": "JORGE ESTEVÃO DA SILVA", "DATA NASC": "1964-09-12", "MÊS": "set", "ESTADO": "RJ", "CIDADE": "SÃO GONÇALO", "CURSOU": "EL", "EMAIL": "", "TELEFONE": "", "OBS": "FALECIDO", "IDADE EM DIAS": "", "NOME DE GUERRA": ""}, {"NÚMERO": "2072", "NIP": "81.3295.39", "PELOTÃO": "3", "NOME": "GERALDO LUIZ MENDES DE LIMA", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "D", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2073", "NIP": "81.3296.36", "PELOTÃO": "1", "NOME": "MAURICIO TENÓRIO DE OLIVEIRA", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "D", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2074", "NIP": "81.3297.33", "PELOTÃO": "2", "NOME": "FERNANDO MOTA DA SILVA", "DATA NASC": "1964-07-10", "MÊS": "jul", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "21 966 676 299", "OBS": "SIM", "IDADE EM DIAS": "22611", "NOME DE GUERRA": ""}, {"NÚMERO": "2075", "NIP": "81.3298.31", "PELOTÃO": "3", "NOME": "ALEXANDRE BATISTA DE SOUZA", "DATA NASC": "1963-05-17", "MÊS": "mai", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "21 992 580 903", "OBS": "SIM", "IDADE EM DIAS": "23031", "NOME DE GUERRA": ""}, {"NÚMERO": "2076", "NIP": "81.3299.38", "PELOTÃO": "1", "NOME": "FLAVIO MARCIO DE SOUZA", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "FALECIDO", "IDADE EM DIAS": "", "NOME DE GUERRA": ""}, {"NÚMERO": "2077", "NIP": "81.3300.31", "PELOTÃO": "2", "NOME": "NILSON XAVIER COSTA", "DATA NASC": "1964-08-05", "MÊS": "ago", "ESTADO": "RJ", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "21 980 704 842", "OBS": "SIM", "IDADE EM DIAS": "22585", "NOME DE GUERRA": ""}, {"NÚMERO": "2078", "NIP": "81.3301.38", "PELOTÃO": "3", "NOME": "RUBEM DE SOUZA SILVA", "DATA NASC": "1963-04-01", "MÊS": "abr", "ESTADO": "PE", "CIDADE": "", "CURSOU": "MT", "EMAIL": "", "TELEFONE": "81 987 658 359", "OBS": "NÃO", "IDADE EM DIAS": "23077", "NOME DE GUERRA": ""}, {"NÚMERO": "2079", "NIP": "81.3302.35", "PELOTÃO": "1", "NOME": "JOSÉ CARLOS PEREIRA", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "FALECIDO", "IDADE EM DIAS": "", "NOME DE GUERRA": ""}, {"NÚMERO": "2080", "NIP": "81.3303.32", "PELOTÃO": "2", "NOME": "TADEU DE SOUZA SILVA", "DATA NASC": "1964-10-31", "MÊS": "out", "ESTADO": "DF", "CIDADE": "BRASÍLIA", "CURSOU": "ES", "EMAIL": "tadeuss2007@gmail.com", "TELEFONE": "61 982 635 162", "OBS": "NÃO", "IDADE EM DIAS": "22498", "NOME DE GUERRA": ""}, {"NÚMERO": "2081", "NIP": "81.3304.30", "PELOTÃO": "3", "NOME": "ROBSON CORDEIRO DA SILVA", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "D", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2082", "NIP": "81.3305.37", "PELOTÃO": "1", "NOME": "JOSIAS SILVA RIBEIRO DE SOUZA", "DATA NASC": "1964-03-15", "MÊS": "mar", "ESTADO": "RN", "CIDADE": "NATAL", "CURSOU": "MG", "EMAIL": "josyasrybeyro@gmail.com", "TELEFONE": "84 994 011 336", "OBS": "SIM", "IDADE EM DIAS": "22728", "NOME DE GUERRA": ""}, {"NÚMERO": "2083", "NIP": "81.3306.34", "PELOTÃO": "2", "NOME": "FERNANDO COSME DOS SANTOS", "DATA NASC": "1964-08-27", "MÊS": "ago", "ESTADO": "", "CIDADE": "", "CURSOU": "MR", "EMAIL": "", "TELEFONE": "47 997 825 380", "OBS": "C", "IDADE EM DIAS": "22563", "NOME DE GUERRA": ""}, {"NÚMERO": "2084", "NIP": "81.3307.31", "PELOTÃO": "3", "NOME": "EDMILSON GOMES DA SILVA", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "D", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2085", "NIP": "81.3308.39", "PELOTÃO": "1", "NOME": "JOSELITO GONÇALVES DE FREITAS", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "D", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2086", "NIP": "81.3309.36", "PELOTÃO": "2", "NOME": "JOSÉ ADEILDO DA SILVA MELO", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "FALECIDO", "IDADE EM DIAS": "", "NOME DE GUERRA": ""}, {"NÚMERO": "2087", "NIP": "81.3310.37", "PELOTÃO": "3", "NOME": "MANOEL SILVESTRE DE MEDEIROS", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "D", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2088", "NIP": "81.3311.34", "PELOTÃO": "1", "NOME": "JOSÉ LUCIANO RIBEIRO DA SILVA FILHO", "DATA NASC": "1965-03-26", "MÊS": "mar", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "21 973 526 690", "OBS": "C", "IDADE EM DIAS": "22352", "NOME DE GUERRA": ""}, {"NÚMERO": "2089", "NIP": "81.3312.31", "PELOTÃO": "2", "NOME": "WALTER JOSÉ DA HORA CORREIA", "DATA NASC": "1963-04-21", "MÊS": "abr", "ESTADO": "SP", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "12 981 111 939", "OBS": "NÃO", "IDADE EM DIAS": "23057", "NOME DE GUERRA": ""}, {"NÚMERO": "2090", "NIP": "81.3313.39", "PELOTÃO": "3", "NOME": "FRANCISCO DAS CHAGAS ARAÚJO", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "D", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2091", "NIP": "81.3314.36", "PELOTÃO": "1", "NOME": "WILTON GALDINO DA SILVA", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "D", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2092", "NIP": "81.3315.33", "PELOTÃO": "2", "NOME": "RONALDO BÉCO DA COSTA", "DATA NASC": "1963-07-30", "MÊS": "jul", "ESTADO": "AL", "CIDADE": "MACEIÓ", "CURSOU": "OR", "EMAIL": "ronaldobecoco1@bol.com.br", "TELEFONE": "82 981 355 022", "OBS": "SIM", "IDADE EM DIAS": "22957", "NOME DE GUERRA": ""}, {"NÚMERO": "2093", "NIP": "81.3316.31", "PELOTÃO": "3", "NOME": "DOMINGOS SAVIO RODRIGUES DE ANDRADE", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "D", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2094", "NIP": "81.3317.38", "PELOTÃO": "1", "NOME": "LUIZ BATISTA PEREIRA FILHO", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "D", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2095", "NIP": "81.3318.35", "PELOTÃO": "2", "NOME": "ALSIMAR TIAGO DE OLIVEIRA", "DATA NASC": "1964-02-17", "MÊS": "fev", "ESTADO": "SP", "CIDADE": "SOCORRO", "CURSOU": "ES", "EMAIL": "tiagomarinha@hotmail.com", "TELEFONE": "12 981 090 488", "OBS": "SIM", "IDADE EM DIAS": "22755", "NOME DE GUERRA": ""}, {"NÚMERO": "2096", "NIP": "81.3319.32", "PELOTÃO": "3", "NOME": "FRANCISCO DE ASSIS DE SOUZA", "DATA NASC": "1963-01-23", "MÊS": "jan", "ESTADO": "DF", "CIDADE": "BRASÍLIA", "CURSOU": "ES", "EMAIL": "", "TELEFONE": "61 986 139 254", "OBS": "NÃO", "IDADE EM DIAS": "23145", "NOME DE GUERRA": ""}, {"NÚMERO": "2097", "NIP": "81.3320.33", "PELOTÃO": "1", "NOME": "ALVARO NUNES CAVALCANTE", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "D", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2098", "NIP": "81.3321.31", "PELOTÃO": "2", "NOME": "REGINALDO DA SILVA COSTA", "DATA NASC": "1963-08-11", "MÊS": "ago", "ESTADO": "RN", "CIDADE": "NATAL", "CURSOU": "", "EMAIL": "", "TELEFONE": "84 998 051 299", "OBS": "NÃO", "IDADE EM DIAS": "22945", "NOME DE GUERRA": "84 981 639 113"}, {"NÚMERO": "2099", "NIP": "81.3322.38", "PELOTÃO": "3", "NOME": "IZAQUE MARIANO DA SILVA", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "D", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2100", "NIP": "81.3323.35", "PELOTÃO": "1", "NOME": "SÉRGIO DO NASCIMENTO", "DATA NASC": "1964-07-18", "MÊS": "jul", "ESTADO": "AL", "CIDADE": "MACEIÓ", "CURSOU": "", "EMAIL": "", "TELEFONE": "82 991 721 609", "OBS": "NÃO", "IDADE EM DIAS": "22603", "NOME DE GUERRA": ""}, {"NÚMERO": "2101", "NIP": "81.3324.32", "PELOTÃO": "2", "NOME": "SEVERINO JOSÉ DA SILVA", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "D", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2102", "NIP": "81.3325.30", "PELOTÃO": "3", "NOME": "CARLOS MARTINS DE BARROS", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "FALECIDO", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2103", "NIP": "81.3326.37", "PELOTÃO": "1", "NOME": "JOSÉ ADILSON FERNANDES PAIXÃO", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "D", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2104", "NIP": "81.3327.34", "PELOTÃO": "2", "NOME": "VLADEMIR DA SILVA FERREIRA", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "D", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2105", "NIP": "81.3328.31", "PELOTÃO": "3", "NOME": "JOÃO FERNANDES DO NASCIMENTO", "DATA NASC": "1964-04-18", "MÊS": "abr", "ESTADO": "RN", "CIDADE": "NATAL", "CURSOU": "", "EMAIL": "", "TELEFONE": "84 986 042 197", "OBS": "SIM", "IDADE EM DIAS": "22694", "NOME DE GUERRA": ""}, {"NÚMERO": "2106", "NIP": "81.3329.39", "PELOTÃO": "1", "NOME": "MARCOS HENRIQUE ANDRADE BATISTA", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "D", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2107", "NIP": "81.3330.30", "PELOTÃO": "2", "NOME": "EDSON TENÓRIO DA SILVA", "DATA NASC": "1963-03-13", "MÊS": "mar", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "82 993 278 323", "OBS": "NÃO", "IDADE EM DIAS": "23096", "NOME DE GUERRA": "21 976 978 020"}, {"NÚMERO": "2108", "NIP": "81.3331.37", "PELOTÃO": "3", "NOME": "MARCO FERNANDO DE SOUZA COSTA", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "D", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2109", "NIP": "81.3332.34", "PELOTÃO": "1", "NOME": "WILLIBLANDES DO SANTOS ERNESTO", "DATA NASC": "1963-12-23", "MÊS": "dez", "ESTADO": "RJ", "CIDADE": "RIO DE JANEIRO", "CURSOU": "CN", "EMAIL": "", "TELEFONE": "21 982 067 613", "OBS": "NÃO", "IDADE EM DIAS": "22811", "NOME DE GUERRA": ""}, {"NÚMERO": "2110", "NIP": "81.3333.31", "PELOTÃO": "2", "NOME": "NILSON ROBERTO NUNES TAVARES", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "D", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2111", "NIP": "81.3334.39", "PELOTÃO": "3", "NOME": "ROSENDO INÁCIO DA COSTA", "DATA NASC": "1964-08-22", "MÊS": "ago", "ESTADO": "RN", "CIDADE": "NATAL", "CURSOU": "", "EMAIL": "rosendocosta2014@gmail.com", "TELEFONE": "84 998 480 418", "OBS": "SIM", "IDADE EM DIAS": "22568", "NOME DE GUERRA": ""}, {"NÚMERO": "2112", "NIP": "81.3335.36", "PELOTÃO": "1", "NOME": "MARCELO FRANCISCO DE SOUZA", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "D", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2113", "NIP": "81.3336.33", "PELOTÃO": "2", "NOME": "RICARDO AGRAMENDES", "DATA NASC": "1964-07-04", "MÊS": "jul", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "21 964 812 692", "OBS": "C", "IDADE EM DIAS": "22617", "NOME DE GUERRA": ""}, {"NÚMERO": "2114", "NIP": "81.3337.31", "PELOTÃO": "3", "NOME": "AIRTON ALVES LINS FILHO", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "D", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2115", "NIP": "81.3338.31", "PELOTÃO": "1", "NOME": "JACY ALVES BARRETO FILHO", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "D", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2116", "NIP": "81.3339.35", "PELOTÃO": "2", "NOME": "SÂNIO FERNANDES DE BELO", "DATA NASC": "1964-05-16", "MÊS": "mai", "ESTADO": "RJ", "CIDADE": "RIO DE JANEIRO", "CURSOU": "MT", "EMAIL": "mispa2018@gmail.com", "TELEFONE": "21 993 800 415", "OBS": "NÃO", "IDADE EM DIAS": "22666", "NOME DE GUERRA": ""}, {"NÚMERO": "2117", "NIP": "81.3340.36", "PELOTÃO": "3", "NOME": "ANDERSON CALADO RIOS", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "FALECIDO", "IDADE EM DIAS": "", "NOME DE GUERRA": ""}, {"NÚMERO": "2118", "NIP": "81.3341.33", "PELOTÃO": "1", "NOME": "EVANDRO JOSÉ BERNARDO DA SILVA", "DATA NASC": "1964-10-05", "MÊS": "out", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "84 988 483 557", "OBS": "NÃO", "IDADE EM DIAS": "22524", "NOME DE GUERRA": ""}, {"NÚMERO": "2119", "NIP": "81.3342.31", "PELOTÃO": "2", "NOME": "EDVALDO GOMES PEREIRA", "DATA NASC": "1964-08-16", "MÊS": "ago", "ESTADO": "", "CIDADE": "", "CURSOU": "MT", "EMAIL": "edvaldosolda@hotmail.com", "TELEFONE": "21 994 672 352", "OBS": "SIM", "IDADE EM DIAS": "22574", "NOME DE GUERRA": ""}, {"NÚMERO": "2120", "NIP": "81.3343.38", "PELOTÃO": "3", "NOME": "CARLOS ALBERTO SILVESTRE DA SILVA", "DATA NASC": "1963-03-01", "MÊS": "mar", "ESTADO": "PE", "CIDADE": "RECIFE", "CURSOU": "", "EMAIL": "", "TELEFONE": "81 988 406 338", "OBS": "SIM", "IDADE EM DIAS": "23108", "NOME DE GUERRA": ""}, {"NÚMERO": "2121", "NIP": "81.3344.35", "PELOTÃO": "1", "NOME": "JOSÉ DA SILVA RIBEIRO", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "D", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2122", "NIP": "81.3345.32", "PELOTÃO": "2", "NOME": "ALCIDES ALVES DA SILVA", "DATA NASC": "", "MÊS": "", "ESTADO": "RJ", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "21 988 534 938", "OBS": "NÃO", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2123", "NIP": "81.3346.30", "PELOTÃO": "3", "NOME": "EDILSON FLORIANO DE CARVALHO ANDRADE", "DATA NASC": "1964-07-19", "MÊS": "jul", "ESTADO": "SP", "CIDADE": "", "CURSOU": "", "EMAIL": "floriano.38@hotmail.com", "TELEFONE": "16 988 097 973", "OBS": "SIM", "IDADE EM DIAS": "22602", "NOME DE GUERRA": ""}, {"NÚMERO": "2124", "NIP": "81.3347.37", "PELOTÃO": "1", "NOME": "PAULO ROBERTO MELO SANTOS", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "D", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2125", "NIP": "81.3348.34", "PELOTÃO": "2", "NOME": "MARCONE BASTO SILVA", "DATA NASC": "1964-04-11", "MÊS": "abr", "ESTADO": "RJ", "CIDADE": "RIO DE JANEIRO", "CURSOU": "MA", "EMAIL": "", "TELEFONE": "21 964 691 380", "OBS": "NÃO", "IDADE EM DIAS": "22701", "NOME DE GUERRA": ""}, {"NÚMERO": "2126", "NIP": "81.3349.31", "PELOTÃO": "3", "NOME": "JORGE ESTÁCIO DO NASCIMENTO", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "FALECIDO", "IDADE EM DIAS": "", "NOME DE GUERRA": ""}, {"NÚMERO": "2127", "NIP": "81.3350.32", "PELOTÃO": "1", "NOME": "IVAN AUGUSTO GOMES COSTA", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "FALECIDO", "IDADE EM DIAS": "", "NOME DE GUERRA": ""}, {"NÚMERO": "2128", "NIP": "81.3351.30", "PELOTÃO": "2", "NOME": "REGINALDO DIAS DE OLIVEIRA", "DATA NASC": "1963-12-28", "MÊS": "dez", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "rdias_63@hotmail.com", "TELEFONE": "21 998 122 413", "OBS": "NÃO", "IDADE EM DIAS": "22806", "NOME DE GUERRA": ""}, {"NÚMERO": "2129", "NIP": "81.3352.37", "PELOTÃO": "3", "NOME": "ROBERTO FERNANDES DOS SANTOS", "DATA NASC": "1964-04-14", "MÊS": "abr", "ESTADO": "BA", "CIDADE": "RETIROLÂNDIA", "CURSOU": "MA", "EMAIL": "rfernandess2009@yahoo.com.br", "TELEFONE": "24 981 052 221", "OBS": "SIM", "IDADE EM DIAS": "22698", "NOME DE GUERRA": ""}, {"NÚMERO": "2130", "NIP": "81.3353.34", "PELOTÃO": "1", "NOME": "EDNALDO JOSÉ DA SILVA", "DATA NASC": "1965-03-04", "MÊS": "mar", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "21 997 347 771", "OBS": "SIM", "IDADE EM DIAS": "22374", "NOME DE GUERRA": ""}, {"NÚMERO": "2131", "NIP": "81.3354.31", "PELOTÃO": "2", "NOME": "JOSÉ DE ARIMATÉIA", "DATA NASC": "1963-04-27", "MÊS": "abr", "ESTADO": "RJ", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "21 964 993 896", "OBS": "NÃO", "IDADE EM DIAS": "23051", "NOME DE GUERRA": "21 996 499 389"}, {"NÚMERO": "2132", "NIP": "81.3355.39", "PELOTÃO": "3", "NOME": "EDNALDO BARBOSA DA SILVA", "DATA NASC": "1964-09-09", "MÊS": "set", "ESTADO": "RN", "CIDADE": "NATAL", "CURSOU": "EL", "EMAIL": "ednaldobarbosasilva@gmail.com", "TELEFONE": "84 996 082 783", "OBS": "SIM", "IDADE EM DIAS": "22550", "NOME DE GUERRA": ""}, {"NÚMERO": "2133", "NIP": "81.3356.36", "PELOTÃO": "1", "NOME": "AVANIR ALEXANDRE DA SILVA", "DATA NASC": "1963-12-06", "MÊS": "dez", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "21 37015068", "OBS": "VRF", "IDADE EM DIAS": "22828", "NOME DE GUERRA": ""}, {"NÚMERO": "2134", "NIP": "81.3357.33", "PELOTÃO": "2", "NOME": "LUINDES SEVERINO DA SILVA", "DATA NASC": "1964-07-27", "MÊS": "jul", "ESTADO": "RJ", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "21 990 527 232", "OBS": "NÃO", "IDADE EM DIAS": "22594", "NOME DE GUERRA": ""}, {"NÚMERO": "2135", "NIP": "81.3358.31", "PELOTÃO": "3", "NOME": "EURIDES NASCIMENTO COSTA", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "D", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2136", "NIP": "81.3359.38", "PELOTÃO": "1", "NOME": "JAILTON JOSÉ OLIVEIRA ARAÚJO", "DATA NASC": "1962-11-04", "MÊS": "nov", "ESTADO": "RJ", "CIDADE": "RIO DE JANEIRO", "CURSOU": "ES", "EMAIL": "jailton__1962araujo@hotmail.com", "TELEFONE": "21 992 759 064", "OBS": "NÃO", "IDADE EM DIAS": "23225", "NOME DE GUERRA": ""}, {"NÚMERO": "2137", "NIP": "81.3360.39", "PELOTÃO": "2", "NOME": "JOSUEL MONTEIRO DA SILVA", "DATA NASC": "1964-10-17", "MÊS": "out", "ESTADO": "PI", "CIDADE": "PARNAÍBA", "CURSOU": "", "EMAIL": "", "TELEFONE": "86 994 803 154", "OBS": "NÃO", "IDADE EM DIAS": "22512", "NOME DE GUERRA": ""}, {"NÚMERO": "2138", "NIP": "81.3361.36", "PELOTÃO": "3", "NOME": "JOACI SOARES DA SILVA", "DATA NASC": "1964-05-02", "MÊS": "mai", "ESTADO": "PB", "CIDADE": "TAPEROÁ", "CURSOU": "", "EMAIL": "joaci2138@hotmail.com", "TELEFONE": "83 987 250 403", "OBS": "SIM", "IDADE EM DIAS": "22680", "NOME DE GUERRA": ""}, {"NÚMERO": "2139", "NIP": "81.3362.33", "PELOTÃO": "1", "NOME": "WERICHE BISPO DOS SANTOS", "DATA NASC": "1964-10-26", "MÊS": "out", "ESTADO": "RJ", "CIDADE": "RIO DE JANEIRO", "CURSOU": "", "EMAIL": "werichebispo75@gmail.com", "TELEFONE": "21 970 061 503", "OBS": "SIM", "IDADE EM DIAS": "22503", "NOME DE GUERRA": ""}, {"NÚMERO": "2140", "NIP": "81.3363.31", "PELOTÃO": "2", "NOME": "EVANDRO JOSÉ DE FREITAS", "DATA NASC": "1964-03-18", "MÊS": "mar", "ESTADO": "PE", "CIDADE": "IGARASSU", "CURSOU": "EL", "EMAIL": "evandrojfreitas81@gmail.com", "TELEFONE": "81 988 319 012", "OBS": "SIM", "IDADE EM DIAS": "22725", "NOME DE GUERRA": ""}, {"NÚMERO": "2141", "NIP": "81.3364.38", "PELOTÃO": "3", "NOME": "JOSELITO SABINO MOREIRA", "DATA NASC": "1964-02-29", "MÊS": "fev", "ESTADO": "AL", "CIDADE": "MACEIÓ", "CURSOU": "", "EMAIL": "sabimoreira1964@gmail.com", "TELEFONE": "21 992 391 484", "OBS": "SIM", "IDADE EM DIAS": "22743", "NOME DE GUERRA": ""}, {"NÚMERO": "2142", "NIP": "81.3365.35", "PELOTÃO": "1", "NOME": "ALEX DAMASCENO DE AMORIM", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "D", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2143", "NIP": "81.3366.32", "PELOTÃO": "2", "NOME": "SYDNEY DE LIMA SANTOS", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "D", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2144", "NIP": "81.3367.30", "PELOTÃO": "3", "NOME": "CLAUDEMIR JOSÉ FERREIRA", "DATA NASC": "1964-02-27", "MÊS": "fev", "ESTADO": "AM", "CIDADE": "MANAUS", "CURSOU": "EL", "EMAIL": "claudemir_rio@hotmail.com", "TELEFONE": "92 982 718 022", "OBS": "SIM", "IDADE EM DIAS": "22745", "NOME DE GUERRA": ""}, {"NÚMERO": "2145", "NIP": "81.3368.37", "PELOTÃO": "1", "NOME": "EMANUEL MESSIAS SIQUEIRA", "DATA NASC": "1964-04-18", "MÊS": "abr", "ESTADO": "PB", "CIDADE": "JOÃO PESSOA", "CURSOU": "EF", "EMAIL": "messiasaloalem@hotmail.com", "TELEFONE": "21 990 384 737", "OBS": "SIM", "IDADE EM DIAS": "22694", "NOME DE GUERRA": ""}, {"NÚMERO": "2146", "NIP": "81.3369.34", "PELOTÃO": "2", "NOME": "NILTON COSTA GONÇALVES", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "D", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2147", "NIP": "81.3370.35", "PELOTÃO": "3", "NOME": "ANDRÉ LUIZ GOMES DE LUNA", "DATA NASC": "", "MÊS": "", "ESTADO": "RJ", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "21 973 232 296", "OBS": "VRF", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2148", "NIP": "81.3371.32", "PELOTÃO": "1", "NOME": "LOURINALDO DE OLIVEIRA", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "D", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2149", "NIP": "81.3372.30", "PELOTÃO": "2", "NOME": "ARTUR PEREIRA DA SILVA FILHO", "DATA NASC": "1964-01-12", "MÊS": "jan", "ESTADO": "PE", "CIDADE": "GOIANA", "CURSOU": "", "EMAIL": "", "TELEFONE": "81 991 973 894", "OBS": "SIM", "IDADE EM DIAS": "22791", "NOME DE GUERRA": ""}, {"NÚMERO": "2150", "NIP": "81.3373.37", "PELOTÃO": "3", "NOME": "GUILHERME EURICO DE OLIVEIRA DIAS", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "D", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2151", "NIP": "81.3374.34", "PELOTÃO": "1", "NOME": "JOÃO GUILHERME DE OLIVEIRA RADTKE", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "D", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2152", "NIP": "81.3375.31", "PELOTÃO": "2", "NOME": "JOSÉ CARLOS ALMEIDA CAMILO", "DATA NASC": "1964-04-13", "MÊS": "abr", "ESTADO": "RJ", "CIDADE": "RIO DE JANEIRO", "CURSOU": "", "EMAIL": "reconcarioca@gmail.com", "TELEFONE": "21 968 102 017", "OBS": "NÃO", "IDADE EM DIAS": "22699", "NOME DE GUERRA": ""}, {"NÚMERO": "2153", "NIP": "81.3376.39", "PELOTÃO": "3", "NOME": "GILMAR FERREIRA DE LIMA", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "", "EMAIL": "", "TELEFONE": "", "OBS": "D", "IDADE EM DIAS": "46179", "NOME DE GUERRA": ""}, {"NÚMERO": "2154", "NIP": "81.3377.36", "PELOTÃO": "1", "NOME": "JOSÉ GERALDO LOPES BARBOSA", "DATA NASC": "", "MÊS": "", "ESTADO": "", "CIDADE": "", "CURSOU": "EF", "EMAIL": "", "TELEFONE": "", "OBS": "FALECIDO", "IDADE EM DIAS": "", "NOME DE GUERRA": ""}];
+
+const OBS_LABELS = {
+  'SIM':'No grupo','NÃO':'Fora do grupo','D':'Desconhecido',
+  'FALECIDO':'Falecido','VRF':'A verificar','C':'Colaborador'
+};
+
+const MONTHS_PT = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+const MONTHS_FULL = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho',
+                     'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+
+// ── Runtime state ──
+let currentObs = 'TODOS';
+let photos = {}; // NIP -> base64
+let photoTarget = null; // NIP of card currently being edited
+
+// ═══════════════════════════════════════════
+// GOOGLE DRIVE — pasta MB-Sierra-II
+// Após fazer upload do fotos.json no Drive:
+//   1. Clique direito → Compartilhar
+//      → 'Qualquer pessoa com o link pode ver'
+//   2. Copie o FILE_ID da URL (entre /d/ e /view)
+//      e cole abaixo substituindo SEU_FILE_ID_AQUI
+// ═══════════════════════════════════════════
+const DRIVE_FILE_ID = '1DlbrcQqkBxk9Fx71wYC4rpKL38N7YWxe'; // ← substitua pelo ID real
+const DRIVE_FETCH_URL = `https://drive.google.com/uc?export=download&id=${DRIVE_FILE_ID}`;
+
+async function loadPhotosFromDrive() {
+  if (DRIVE_FILE_ID === 'SEU_FILE_ID_AQUI') {
+    // Ainda não configurado: usa apenas cache local
+    try { Object.assign(photos, JSON.parse(localStorage.getItem('sierra2_photos') || '{}')); } catch(_) {}
+    return;
+  }
+  try {
+    const resp = await fetch(DRIVE_FETCH_URL);
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    const data = await resp.json();
+    // aceita objeto {NIP: base64} ou array [{NIP, _photo}]
+    if (Array.isArray(data)) {
+      data.forEach(row => { if (row.NIP && row._photo) photos[row.NIP] = row._photo; });
+    } else {
+      Object.assign(photos, data);
+    }
+    setDriveStatus('ok', '\u2713 Fotos carregadas do Google Drive (MB-Sierra-II)');
+  } catch(e) {
+    try { Object.assign(photos, JSON.parse(localStorage.getItem('sierra2_photos') || '{}')); } catch(_) {}
+    setDriveStatus('err', `\u26a0 Drive indispon\u00edvel: ${e.message}. Exibindo cache local.`);
+  }
+}
+
+function setDriveStatus(type, msg) {
+  const el = document.getElementById('drive-status');
+  if (!el) return;
+  el.className = 'drive-status ' + type;
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+
+function savePhotosLocal() {
+  try { localStorage.setItem('sierra2_photos', JSON.stringify(photos)); } catch(e) {}
+}
+
+// ═══════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════
+function init() {
+  const now = new Date();
+  const thisMonth = now.getMonth(); // 0-based
+  const thisMonthKey = MONTHS_PT[thisMonth];
+
+  // ── Birthday banner ──
+  const bdaySection = document.getElementById('birthday-section');
+  const bdayCards = document.getElementById('bday-cards');
+  const bdayPeople = BASE_DATA.filter(r => r['MÊS'] === thisMonthKey && r['DATA NASC']);
+  
+  document.getElementById('month-name').textContent = MONTHS_FULL[thisMonth];
+  document.getElementById('bday-count').textContent = bdayPeople.length;
+  document.getElementById('total-count').textContent = BASE_DATA.length;
+  document.getElementById('active-count').textContent = BASE_DATA.filter(r=>r['OBS']==='SIM').length;
+
+  if (bdayPeople.length > 0) {
+    bdaySection.classList.add('has-birthdays');
+    bdayPeople.sort((a,b) => {
+      const da = new Date(a['DATA NASC']).getDate();
+      const db = new Date(b['DATA NASC']).getDate();
+      return da - db;
+    });
+    bdayPeople.forEach(p => {
+      const card = document.createElement('div');
+      card.className = 'bday-card';
+      const cd = countdown(p['DATA NASC']);
+      const cdClass = cd === 'HOJE! 🎉' ? 'countdown today' : 'countdown';
+      const [y,m,d] = p['DATA NASC'].split('-');
+      const age = now.getFullYear() - parseInt(y);
+      card.innerHTML = `
+        <div class="bday-name">${p['NOME']}</div>
+        <div class="bday-date">📅 ${d}/${m} · ${age} anos</div>
+        <span class="${cdClass}">${cd}</span>`;
+      card.addEventListener('click', () => {
+        document.getElementById('search').value = p['NOME'].split(' ')[0];
+        filterAll();
+        card.scrollIntoView({behavior:'smooth',block:'nearest'});
+      });
+      bdayCards.appendChild(card);
+    });
+  }
+
+  // Carrega fotos do Drive (async) e depois renderiza
+  loadPhotosFromDrive().then(() => renderGrid());
+}
+
+// ═══════════════════════════════════════════
+// COUNTDOWN
+// ═══════════════════════════════════════════
+function countdown(dateStr) {
+  if (!dateStr) return '';
+  const now = new Date();
+  const [y,m,d] = dateStr.split('-').map(Number);
+  let next = new Date(now.getFullYear(), m-1, d);
+  if (next < now) {
+    const todayOnly = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const nextDay = new Date(now.getFullYear(), m-1, d);
+    if (nextDay < todayOnly) next = new Date(now.getFullYear()+1, m-1, d);
+  }
+  const todayOnly = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const diff = Math.round((next - todayOnly) / 86400000);
+  if (diff === 0) return 'HOJE! 🎉';
+  if (diff === 1) return 'Amanhã';
+  return `Faltam ${diff} dias`;
+}
+
+// ═══════════════════════════════════════════
+// PHONE HELPERS
+// ═══════════════════════════════════════════
+function cleanPhone(raw) {
+  return raw.replace(/\D/g,'');
+}
+function waLink(raw) {
+  const digits = cleanPhone(raw);
+  if (!digits) return '';
+  // Add 55 (Brazil) if not international
+  const num = digits.startsWith('55') || digits.length > 11 ? digits : '55'+digits;
+  return `https://wa.me/${num}`;
+}
+
+// ═══════════════════════════════════════════
+// RENDER
+// ═══════════════════════════════════════════
+function renderGrid() {
+  const grid = document.getElementById('grid');
+  const search = document.getElementById('search').value.toLowerCase().trim();
+  const now = new Date();
+  const thisMonthKey = MONTHS_PT[now.getMonth()];
+
+  let filtered = BASE_DATA.filter(r => {
+    if (currentObs !== 'TODOS' && r['OBS'] !== currentObs) return false;
+    if (search) {
+      const hay = [r['NOME'],r['NIP'],r['CIDADE'],r['ESTADO'],r['EMAIL'],r['TELEFONE'],r['PELOTÃO'],r['NÚMERO']].join(' ').toLowerCase();
+      if (!hay.includes(search)) return false;
+    }
+    return true;
+  });
+
+  // Remove existing cards (keep #empty)
+  Array.from(grid.querySelectorAll('.card')).forEach(c => c.remove());
+
+  document.getElementById('shown-count').textContent = filtered.length;
+  document.getElementById('total-shown').textContent = BASE_DATA.length;
+  document.getElementById('empty').style.display = filtered.length === 0 ? 'block' : 'none';
+
+  filtered.forEach(r => {
+    const card = buildCard(r, thisMonthKey);
+    grid.appendChild(card);
+  });
+}
+
+function buildCard(r, thisMonthKey) {
+  const card = document.createElement('div');
+  card.className = `card obs-${r['OBS']}`;
+  if (r['MÊS'] && r['MÊS'] === thisMonthKey) card.classList.add('birthday-month');
+
+  const nip = r['NIP'];
+  const photoSrc = photos[nip];
+
+  const plt = r['PELOTÃO'] ? `<span class="badge badge-plt">Plt ${r['PELOTÃO']}</span>` : '';
+  const obsLabel = OBS_LABELS[r['OBS']] || r['OBS'];
+  const obsClass = r['OBS'] ? `badge-obs-${r['OBS'].replace(/[^A-ZÃÃa-z]/g,'')}` : '';
+  const obsBadge = r['OBS'] ? `<span class="badge ${obsClass}">${obsLabel}</span>` : '';
+  const cursouBadge = r['CURSOU'] ? `<span class="badge badge-cursou">${r['CURSOU']}</span>` : '';
+
+  const loc = [r['CIDADE'], r['ESTADO']].filter(Boolean).join(' · ');
+
+  let contacts = '';
+  if (r['TELEFONE']) {
+    const link = waLink(r['TELEFONE']);
+    contacts += `<div class="contact-row">
+      <span class="contact-icon">📱</span>
+      <a class="wa-link" href="${link}" target="_blank" rel="noopener">${r['TELEFONE']}</a>
+    </div>`;
+  }
+  if (r['EMAIL']) {
+    contacts += `<div class="contact-row">
+      <span class="contact-icon">✉️</span>
+      <a href="mailto:${r['EMAIL']}">${r['EMAIL']}</a>
+    </div>`;
+  }
+
+  let bdayRow = '';
+  if (r['DATA NASC']) {
+    const [y,m,d] = r['DATA NASC'].split('-');
+    const now = new Date();
+    const age = now.getFullYear() - parseInt(y);
+    const cd = countdown(r['DATA NASC']);
+    bdayRow = `<div class="card-bday">
+      <span>🎂</span>
+      <span class="bday-val">${d}/${m}/${y}</span>
+      ${cd ? `<span class="countdown ${cd.startsWith('HOJE')? 'today':''}" style="font-size:10px;padding:1px 6px;background:rgba(201,168,76,0.1);border-radius:3px;color:var(--gold);font-family:'IBM Plex Mono',monospace">${cd}</span>` : ''}
+      <span class="age-val">${age} anos</span>
+    </div>`;
+  }
+
+  card.innerHTML = `
+    <div class="card-top">
+      <div class="photo-wrap" data-nip="${nip}">
+        ${photoSrc ? `<img src="${photoSrc}" alt="foto">` : '<span class="photo-placeholder">👤</span>'}
+        <span class="photo-hint">Foto</span>
+      </div>
+      <div class="card-info">
+        <div class="card-num">Nº ${r['NÚMERO']} · ${r['NIP']}</div>
+        <div class="card-name">${r['NOME']}</div>
+        <div class="card-badges">${plt}${obsBadge}${cursouBadge}</div>
+        ${loc ? `<div class="card-location">📍 ${loc}</div>` : ''}
+      </div>
+    </div>
+    ${(contacts||bdayRow) ? '<div class="card-divider"></div>' : ''}
+    ${contacts ? `<div class="card-contacts">${contacts}</div>` : ''}
+    ${bdayRow}
+  `;
+
+  card.querySelector('.photo-wrap').addEventListener('click', () => openPhotoModal(r));
+  return card;
+}
+
+// ═══════════════════════════════════════════
+// FILTERS
+// ═══════════════════════════════════════════
+function setObsFilter(btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentObs = btn.dataset.obs;
+  filterAll();
+}
+
+function filterAll() { renderGrid(); }
+
+// ═══════════════════════════════════════════
+// PHOTO MODAL
+// ═══════════════════════════════════════════
+function openPhotoModal(r) {
+  if (r['OBS'] === 'FALECIDO') return;
+  photoTarget = r['NIP'];
+  document.getElementById('modal-name').textContent = r['NOME'];
+  const hasPhoto = !!photos[r['NIP']];
+  document.getElementById('remove-photo-btn').style.display = hasPhoto ? '' : 'none';
+  document.getElementById('modal-overlay').classList.add('open');
+}
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  photoTarget = null;
+}
+function triggerPhotoInput() {
+  const inp = document.createElement('input');
+  inp.type = 'file';
+  inp.accept = 'image/*';
+  inp.onchange = e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      photos[photoTarget] = ev.target.result;
+      savePhotosLocal();
+      closeModal();
+      renderGrid();
+    };
+    reader.readAsDataURL(file);
+  };
+  inp.click();
+}
+function removePhoto() {
+  delete photos[photoTarget];
+  savePhotosLocal();
+  closeModal();
+  renderGrid();
+}
+function savePhotos() {
+  try { localStorage.setItem('sierra2_photos', JSON.stringify(photos)); } catch(e) {}
+}
+
+// ═══════════════════════════════════════════
+// IMPORT / EXPORT
+// ═══════════════════════════════════════════
+function openIO(mode) {
+  document.getElementById('io-modal-overlay').classList.add('open');
+  document.getElementById('io-import-panel').style.display = mode === 'import' ? '' : 'none';
+  document.getElementById('io-export-panel').style.display = mode === 'export' ? '' : 'none';
+  document.getElementById('io-title').textContent = mode === 'import' ? '📥 Importar Dados' : '📤 Exportar Dados';
+}
+function closeIO() { document.getElementById('io-modal-overlay').classList.remove('open'); }
+
+function doExport() {
+  const fmt = document.getElementById('export-format').value;
+  const status = document.getElementById('export-status');
+  try {
+    if (fmt === 'json') {
+      // JSON de dados (sem fotos — fotos ficam no Drive)
+      const payload = BASE_DATA.map(r => {const o={...r}; delete o._photo; return o;});
+      const blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json'});
+      downloadBlob(blob, 'Sierra_II_Lista_Geral.json');
+      status.className = 'io-status ok';
+      status.textContent = '✓ JSON de dados baixado. Para atualizar dados, suba este arquivo ao GitHub.';
+    } else if (fmt === 'fotos') {
+      // JSON de fotos para o Google Drive (pasta MB-Sierra-II)
+      const fotoObj = {};
+      Object.keys(photos).forEach(nip => { if (photos[nip]) fotoObj[nip] = photos[nip]; });
+      const blob = new Blob([JSON.stringify(fotoObj, null, 2)], {type:'application/json'});
+      downloadBlob(blob, 'fotos.json');
+      status.className = 'io-status ok';
+      status.textContent = '✓ fotos.json baixado. Faça upload deste arquivo na pasta MB-Sierra-II do Google Drive, substituindo o anterior.';
+    } else {
+      // CSV
+      const cols = ['NÚMERO','NIP','PELOTÃO','NOME','DATA NASC','MÊS','ESTADO','CIDADE','CURSOU','EMAIL','TELEFONE','OBS','NOME DE GUERRA'];
+      const rows = BASE_DATA.map(r => cols.map(c => `"${(r[c]||'').replace(/"/g,'""')}"`).join(';'));
+      const csv = '\uFEFF' + cols.join(';') + '\n' + rows.join('\n');
+      const blob = new Blob([csv], {type:'text/csv;charset=utf-8'});
+      downloadBlob(blob, 'Sierra_II_Lista_Geral.csv');
+      status.className = 'io-status ok';
+      status.textContent = '✓ CSV gerado com sucesso!';
+    }
+  } catch(e) {
+    status.className = 'io-status err';
+    status.textContent = '✗ Erro ao exportar: ' + e.message;
+  }
+}
+
+function doImport() {
+  const raw = document.getElementById('import-textarea').value.trim();
+  const status = document.getElementById('import-status');
+  if (!raw) { status.className='io-status err'; status.textContent='Cole o JSON no campo acima.'; return; }
+  try {
+    const imported = JSON.parse(raw);
+    let added = 0, updated = 0;
+    imported.forEach(row => {
+      const nip = row['NIP'];
+      if (!nip) return;
+      const idx = BASE_DATA.findIndex(r => r['NIP'] === nip);
+      if (row._photo) { photos[nip] = row._photo; }
+      if (idx === -1) { BASE_DATA.push(row); added++; }
+      else { Object.assign(BASE_DATA[idx], row); updated++; }
+    });
+    savePhotosLocal();
+    renderGrid();
+    status.className = 'io-status ok';
+    status.textContent = `✓ ${added} adicionado(s), ${updated} atualizado(s).`;
+    updateCounters();
+  } catch(e) {
+    status.className = 'io-status err';
+    status.textContent = '✗ JSON inválido: ' + e.message;
+  }
+}
+
+function doFileImport() {
+  const fileInp = document.getElementById('zip-file-input');
+  const status = document.getElementById('zip-import-status');
+  const file = fileInp.files[0];
+  if (!file) { status.className='io-status err'; status.textContent='Selecione um arquivo.'; return; }
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const text = new TextDecoder('utf-8').decode(new Uint8Array(e.target.result));
+      const imported = JSON.parse(text);
+      let added = 0, updated = 0;
+      imported.forEach(row => {
+        const nip = row['NIP'];
+        if (!nip) return;
+        const idx = BASE_DATA.findIndex(r => r['NIP'] === nip);
+        if (row._photo) photos[nip] = row._photo;
+        if (idx === -1) { BASE_DATA.push(row); added++; }
+        else { Object.assign(BASE_DATA[idx], row); updated++; }
+      });
+      savePhotosLocal();
+      renderGrid();
+      status.className = 'io-status ok';
+      status.textContent = `✓ ${added} adicionado(s), ${updated} atualizado(s).`;
+      updateCounters();
+    } catch(err) {
+      status.className = 'io-status err';
+      status.textContent = '✗ Erro ao ler arquivo: ' + err.message;
+    }
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+function downloadBlob(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function updateCounters() {
+  document.getElementById('total-count').textContent = BASE_DATA.length;
+  document.getElementById('active-count').textContent = BASE_DATA.filter(r=>r['OBS']==='SIM').length;
+}
+
+// kick off
+init();
+</script>
+</body>
+</html>
