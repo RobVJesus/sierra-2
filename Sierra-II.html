@@ -699,10 +699,6 @@
   </div>
   <div class="header-stats">
     <div class="stat-pill">
-      <div class="num" id="total-count">—</div>
-      <div class="lbl">Total</div>
-    </div>
-    <div class="stat-pill">
       <div class="num" id="active-count">—</div>
       <div class="lbl">Presente</div>
     </div>
@@ -728,14 +724,14 @@
   <div class="search-wrap">
     <input type="text" id="search" placeholder="Buscar por nome, NIP, cidade, email…" oninput="filterAll()">
   </div>
-  <div class="filter-group">
-    <span class="filter-label">OBS:</span>
-    <button class="filter-btn active" data-obs="TODOS" onclick="setObsFilter(this)">Todos</button>
-    <button class="filter-btn" data-obs="SIM" onclick="setObsFilter(this)">Presente</button>
-    <button class="filter-btn" data-obs="NÃO" onclick="setObsFilter(this)">Ausente</button>
-    <button class="filter-btn" data-obs="VRF" onclick="setObsFilter(this)">A verificar</button>
-    <button class="filter-btn" data-obs="D" onclick="setObsFilter(this)">Não encontrado</button>
-    <button class="filter-btn" data-obs="FALECIDO" onclick="setObsFilter(this)">Falecido</button>
+  <div class="filter-group" id="filter-group-main">
+    <button class="filter-btn active" data-mode="completos" onclick="setFiltro(this)">📋 Com tel. e aniv.</button>
+    <button class="filter-btn" data-mode="todos"     onclick="setFiltro(this)">👥 Todos</button>
+    <button class="filter-btn" data-mode="SIM"       onclick="setFiltro(this)">Presente</button>
+    <button class="filter-btn" data-mode="NÃO"       onclick="setFiltro(this)">Ausente</button>
+    <button class="filter-btn" data-mode="VRF"       onclick="setFiltro(this)">A verificar</button>
+    <button class="filter-btn" data-mode="D"         onclick="setFiltro(this)">Não encontrado</button>
+    <button class="filter-btn" data-mode="FALECIDO"  onclick="setFiltro(this)">Falecido</button>
   </div>
   <button class="btn-action import" onclick="openIO('import')"><span>📥</span> Importar</button>
   <button class="btn-action" onclick="openIO('export')"><span>📤</span> Exportar</button>
@@ -862,7 +858,7 @@ const MONTHS_FULL = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho',
                      'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
 
 // ── Runtime state ──
-let currentObs = 'TODOS';
+let filtroAtivo = 'completos'; // modos: completos | todos | SIM | NÃO | VRF | D | FALECIDO
 let photos = {}; // NIP -> base64
 let photoTarget = null; // NIP of card currently being edited
 
@@ -926,7 +922,7 @@ function init() {
   
   document.getElementById('month-name').textContent = MONTHS_FULL[thisMonth];
   document.getElementById('bday-count').textContent = bdayPeople.length;
-  document.getElementById('total-count').textContent = BASE_DATA.length;
+  // total-count removido
   document.getElementById('active-count').textContent = BASE_DATA.filter(r=>r['OBS']==='SIM').length;
 
   if (bdayPeople.length > 0) {
@@ -1005,7 +1001,15 @@ function renderGrid() {
   const thisMonthKey = MONTHS_PT[now.getMonth()];
 
   let filtered = BASE_DATA.filter(r => {
-    if (currentObs !== 'TODOS' && r['OBS'] !== currentObs) return false;
+    if (filtroAtivo === 'completos') {
+      if (!r['TELEFONE'] && !r['DATA NASC']) return false;
+      if (r['OBS'] === 'FALECIDO') return false;
+    } else if (filtroAtivo === 'todos') {
+      // sem restrição
+    } else {
+      // filtro por OBS específico
+      if (r['OBS'] !== filtroAtivo) return false;
+    }
     if (search) {
       const hay = [r['NOME'],r['NIP'],r['CIDADE'],r['ESTADO'],r['EMAIL'],r['TELEFONE'],r['PELOTÃO'],r['NÚMERO']].join(' ').toLowerCase();
       if (!hay.includes(search)) return false;
@@ -1097,12 +1101,14 @@ function buildCard(r, thisMonthKey) {
 // ═══════════════════════════════════════════
 // FILTERS
 // ═══════════════════════════════════════════
-function setObsFilter(btn) {
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+function setFiltro(btn) {
+  document.querySelectorAll('#filter-group-main .filter-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  currentObs = btn.dataset.obs;
+  filtroAtivo = btn.dataset.mode;
   filterAll();
 }
+
+
 
 function filterAll() { renderGrid(); }
 
@@ -1367,7 +1373,7 @@ function downloadBlob(blob, filename) {
 }
 
 function updateCounters() {
-  document.getElementById('total-count').textContent = BASE_DATA.length;
+  // total-count removido
   document.getElementById('active-count').textContent = BASE_DATA.filter(r=>r['OBS']==='SIM').length;
 }
 
