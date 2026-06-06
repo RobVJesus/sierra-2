@@ -532,6 +532,112 @@
     border-top:1px solid var(--border);
     margin-top:8px;
   }
+
+  /* ─── DRIVE CONFIG PANEL ────────────────── */
+  .drive-config-panel {
+    background: rgba(201,168,76,0.05);
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 14px;
+  }
+  .drive-config-panel h5 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 15px;
+    letter-spacing: 2px;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+  .drive-config-panel .step {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    margin-bottom: 8px;
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .drive-config-panel .step-num {
+    background: var(--gold);
+    color: var(--navy);
+    font-weight: 700;
+    font-size: 10px;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .drive-config-panel .step strong { color: var(--white); }
+  .drive-config-panel .step code {
+    background: rgba(255,255,255,0.08);
+    border-radius: 3px;
+    padding: 1px 5px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--gold-light);
+  }
+  .drive-id-row {
+    display: flex; gap: 8px; align-items: center; margin-top: 10px;
+  }
+  .drive-id-row input {
+    flex: 1;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 7px 10px;
+    color: var(--white);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    outline: none;
+  }
+  .drive-id-row input:focus { border-color: var(--gold); }
+  .drive-id-row input::placeholder { color: var(--muted); opacity: 0.6; }
+  .btn-drive-save {
+    background: var(--gold);
+    color: var(--navy);
+    border: none;
+    border-radius: 6px;
+    padding: 7px 14px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: opacity 0.15s;
+  }
+  .btn-drive-save:hover { opacity: 0.85; }
+  .drive-current {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 6px;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .drive-current.configured { color: var(--green); }
+
+  /* ─── FORMATO EXPORT BUTTONS ────────────── */
+  .fmt-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
+  .fmt-btn {
+    display: flex; align-items: center; gap: 10px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    color: var(--muted);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.15s;
+    width: 100%;
+  }
+  .fmt-btn:hover { border-color: var(--gold-dim); color: var(--white); }
+  .fmt-btn.active { border-color: var(--gold); background: rgba(201,168,76,0.1); color: var(--white); }
+  .fmt-btn .fmt-icon { font-size: 16px; flex-shrink: 0; }
+  .fmt-btn .fmt-label { font-weight: 600; flex-shrink: 0; }
+  .fmt-btn .fmt-dest { font-size: 11px; color: var(--muted); margin-left: auto; }
+  .fmt-btn.active .fmt-dest { color: var(--gold-dim); }
+
 </style>
 </head>
 <body>
@@ -644,19 +750,39 @@
     </div>
 
     <div id="io-export-panel" class="io-section" style="display:none">
-      <h4>📤 Exportar Dados</h4>
-      <p>Escolha o formato conforme o destino:</p>
-      <ul style="font-size:12px;color:var(--muted);margin-bottom:12px;padding-left:18px;line-height:1.8">
-        <li><strong style="color:var(--white)">JSON de dados</strong> → suba ao GitHub (dados sem fotos, arquivo leve)</li>
-        <li><strong style="color:var(--white)">fotos.json</strong> → suba ao Google Drive na pasta <code>MB-Sierra-II</code> (substitua o arquivo anterior)</li>
-        <li><strong style="color:var(--white)">CSV</strong> → planilha sem fotos</li>
-      </ul>
-      <label>Formato:</label>
-      <select id="export-format">
-        <option value="json">JSON de dados — para GitHub</option>
-        <option value="fotos">fotos.json — para Google Drive (MB-Sierra-II)</option>
-        <option value="csv">CSV (sem fotos)</option>
-      </select>
+
+      <!-- Configuração do Drive -->
+      <div class="drive-config-panel">
+        <h5>☁ Google Drive — MB-Sierra-II</h5>
+        <div class="step"><span class="step-num">1</span><span>No Drive, crie a pasta <strong>MB-Sierra-II</strong> e faça upload de um arquivo <code>fotos.json</code> com o conteúdo <code>{}</code></span></div>
+        <div class="step"><span class="step-num">2</span><span>Clique com botão direito no <code>fotos.json</code> → <strong>Compartilhar</strong> → <strong>Qualquer pessoa com o link</strong></span></div>
+        <div class="step"><span class="step-num">3</span><span>Copie o link. O <strong>FILE ID</strong> é a parte entre <code>/d/</code> e <code>/view</code> na URL</span></div>
+        <div class="step"><span class="step-num">4</span><span>Cole o FILE ID abaixo e clique <strong>Salvar</strong>. O artefato carregará as fotos automaticamente.</span></div>
+        <div class="drive-id-row">
+          <input type="text" id="drive-id-input" placeholder="Cole o FILE ID aqui…" oninput="this.value=this.value.trim()">
+          <button class="btn-drive-save" onclick="saveDriveId()">Salvar</button>
+        </div>
+        <div class="drive-current" id="drive-current-label">⬤ Drive não configurado</div>
+      </div>
+
+      <!-- Formato -->
+      <div class="fmt-group" id="export-format-group">
+        <button class="fmt-btn active" data-fmt="json" onclick="setFmt(this)">
+          <span class="fmt-icon">🗂</span>
+          <span class="fmt-label">JSON de dados</span>
+          <span class="fmt-dest">→ GitHub</span>
+        </button>
+        <button class="fmt-btn" data-fmt="fotos" onclick="setFmt(this)">
+          <span class="fmt-icon">🖼</span>
+          <span class="fmt-label">fotos.json</span>
+          <span class="fmt-dest">→ Google Drive / MB-Sierra-II</span>
+        </button>
+        <button class="fmt-btn" data-fmt="csv" onclick="setFmt(this)">
+          <span class="fmt-icon">📊</span>
+          <span class="fmt-label">CSV</span>
+          <span class="fmt-dest">→ Planilha sem fotos</span>
+        </button>
+      </div>
       <button class="modal-btn btn-primary" onclick="doExport()" style="width:100%">⬇ Baixar arquivo</button>
       <div class="io-status" id="export-status"></div>
     </div>
@@ -691,28 +817,27 @@ let photoTarget = null; // NIP of card currently being edited
 //   2. Copie o FILE_ID da URL (entre /d/ e /view)
 //      e cole abaixo substituindo SEU_FILE_ID_AQUI
 // ═══════════════════════════════════════════
-const DRIVE_FILE_ID = '1DlbrcQqkBxk9Fx71wYC4rpKL38N7YWxe'; // ← substitua pelo ID real
-const DRIVE_FETCH_URL = `https://drive.google.com/uc?export=download&id=${DRIVE_FILE_ID}`;
+// FILE ID configurável pelo usuário via painel (sem editar código)
+let DRIVE_FILE_ID_LIVE = localStorage.getItem('sierra2_drive_id') || '';
 
 async function loadPhotosFromDrive() {
-  if (DRIVE_FILE_ID === 'SEU_FILE_ID_AQUI') {
-    // Ainda não configurado: usa apenas cache local
-    try { Object.assign(photos, JSON.parse(localStorage.getItem('sierra2_photos') || '{}')); } catch(_) {}
-    return;
-  }
+  const id = DRIVE_FILE_ID_LIVE;
+  // Cache local primeiro — resposta instantânea
+  try { Object.assign(photos, JSON.parse(localStorage.getItem('sierra2_photos') || '{}')); } catch(_) {}
+  if (!id || id === 'SEU_FILE_ID_AQUI') return;
+  const url = `https://drive.google.com/uc?export=download&id=${id}`;
   try {
-    const resp = await fetch(DRIVE_FETCH_URL);
+    const resp = await fetch(url);
     if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
     const data = await resp.json();
-    // aceita objeto {NIP: base64} ou array [{NIP, _photo}]
     if (Array.isArray(data)) {
       data.forEach(row => { if (row.NIP && row._photo) photos[row.NIP] = row._photo; });
     } else {
       Object.assign(photos, data);
     }
-    setDriveStatus('ok', '\u2713 Fotos carregadas do Google Drive (MB-Sierra-II)');
+    savePhotosLocal();
+    setDriveStatus('ok', '\u2713 Fotos sincronizadas com Google Drive (MB-Sierra-II)');
   } catch(e) {
-    try { Object.assign(photos, JSON.parse(localStorage.getItem('sierra2_photos') || '{}')); } catch(_) {}
     setDriveStatus('err', `\u26a0 Drive indispon\u00edvel: ${e.message}. Exibindo cache local.`);
   }
 }
@@ -774,7 +899,8 @@ function init() {
     });
   }
 
-  // Carrega fotos do Drive (async) e depois renderiza
+  // Atualiza label do Drive e carrega fotos (async)
+  updateDriveLabel();
   loadPhotosFromDrive().then(() => renderGrid());
 }
 
@@ -968,16 +1094,58 @@ function savePhotos() {
 // ═══════════════════════════════════════════
 // IMPORT / EXPORT
 // ═══════════════════════════════════════════
+function saveDriveId() {
+  const val = document.getElementById('drive-id-input').value.trim();
+  if (!val) { alert('Cole o FILE ID do Google Drive antes de salvar.'); return; }
+  // Extrai ID caso o usuário cole a URL inteira
+  const match = val.match(/\/d\/([a-zA-Z0-9_-]+)/);
+  const id = match ? match[1] : val;
+  localStorage.setItem('sierra2_drive_id', id);
+  DRIVE_FILE_ID_LIVE = id;
+  updateDriveLabel();
+  // Recarrega fotos do Drive imediatamente
+  loadPhotosFromDrive().then(() => {
+    renderGrid();
+    setDriveStatus('ok', '✓ Drive configurado e fotos carregadas!');
+  });
+}
+
+function updateDriveLabel() {
+  const id = localStorage.getItem('sierra2_drive_id') || '';
+  const el = document.getElementById('drive-current-label');
+  const inp = document.getElementById('drive-id-input');
+  if (!el) return;
+  if (id && id !== 'SEU_FILE_ID_AQUI') {
+    el.textContent = '✓ Drive configurado · ID: ' + id.substring(0,12) + '…';
+    el.className = 'drive-current configured';
+    if (inp) inp.placeholder = id.substring(0,12) + '… (clique para alterar)';
+  } else {
+    el.textContent = '⬤ Drive não configurado';
+    el.className = 'drive-current';
+  }
+}
+
+function setFmt(btn) {
+  document.querySelectorAll('.fmt-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function getExportFmt() {
+  const active = document.querySelector('.fmt-btn.active');
+  return active ? active.dataset.fmt : 'json';
+}
+
 function openIO(mode) {
   document.getElementById('io-modal-overlay').classList.add('open');
   document.getElementById('io-import-panel').style.display = mode === 'import' ? '' : 'none';
   document.getElementById('io-export-panel').style.display = mode === 'export' ? '' : 'none';
   document.getElementById('io-title').textContent = mode === 'import' ? '📥 Importar Dados' : '📤 Exportar Dados';
+  if (mode === 'export') updateDriveLabel();
 }
 function closeIO() { document.getElementById('io-modal-overlay').classList.remove('open'); }
 
 function doExport() {
-  const fmt = document.getElementById('export-format').value;
+  const fmt = getExportFmt();
   const status = document.getElementById('export-status');
   try {
     if (fmt === 'json') {
